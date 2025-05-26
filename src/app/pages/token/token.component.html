@@ -1,0 +1,98 @@
+<app-page-container title="代币管理" description="管理代币获取任务与消耗规则">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- 代币获取任务管理 -->
+    <app-card title="代币获取任务管理" class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-base text-gray-700">任务列表</span>
+        <app-button type="primary" (clicked)="openTaskModal()">新增任务</app-button>
+      </div>
+      <!-- 任务列表 原生表格 -->
+      <table class="min-w-full divide-y divide-stroke-soft-200">
+        <thead>
+          <tr>
+            @for (col of taskColumns; track col.key) {
+            <th class="px-4 py-2 text-left text-xs font-medium text-text-secondary-500 uppercase tracking-wider">
+              {{ col.label }}
+            </th>
+            }
+            <th class="px-4 py-2">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of taskList; track task) {
+          <tr>
+            <td class="px-4 py-2">{{ task.name }}</td>
+            <td class="px-4 py-2">{{ task.desc }}</td>
+            <td class="px-4 py-2">
+              <app-badge [type]="task.status === 'online' ? 'success' : 'danger'">
+                {{ task.status === 'online' ? '在线' : '离线' }}
+              </app-badge>
+            </td>
+            <td class="px-4 py-2">
+              @for (action of taskActions; track action.label) {
+                <button
+                  (click)="action.label === '编辑' ? editTask(task) : toggleTaskStatus(task)"
+                  class="text-accent-600 hover:underline mr-2"
+                >
+                  {{ action.label }}
+                </button>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </app-card>
+    <!-- 代币消耗规则管理 -->
+    <app-card title="代币消耗规则管理" class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-base text-gray-700">规则列表</span>
+        <app-button type="primary" (clicked)="openRuleModal()">新增规则</app-button>
+      </div>
+      <!-- 规则列表 原生表格 -->
+      <table class="min-w-full divide-y divide-stroke-soft-200">
+        <thead>
+          <tr>
+            @for (col of ruleColumns; track col.key) {
+            <th class="px-4 py-2 text-left text-xs font-medium text-text-secondary-500 uppercase tracking-wider">
+              {{ col.label }}
+            </th>
+            }
+            <th class="px-4 py-2">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rule of ruleList; track rule) {
+          <tr>
+            <td class="px-4 py-2">{{ rule.name }}</td>
+            <td class="px-4 py-2">{{ rule.desc }}</td>
+             <td class="px-4 py-2">
+              <app-badge [type]="rule.status === 'online' ? 'success' : 'danger'">
+                {{ rule.status === 'online' ? '在线' : '离线' }}
+              </app-badge>
+            </td>
+            <td class="px-4 py-2">
+              @for (action of ruleActions; track action.label) {
+                <button
+                   (click)="action.label === '编辑' ? editRule(rule) : toggleRuleStatus(rule)"
+                   class="text-accent-600 hover:underline mr-2"
+                 >
+                  {{ action.label }}
+                </button>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </app-card>
+  </div>
+  <!-- 任务弹窗 -->
+  <app-modal [isOpen]="taskModalOpen" [title]="editingTask ? '编辑任务' : '新增任务'">
+    <!-- 表单内容后续补充 -->
+  </app-modal>
+  <!-- 规则弹窗 -->
+  <app-modal [isOpen]="ruleModalOpen" [title]="editingRule ? '编辑规则' : '新增规则'">
+    <!-- 表单内容后续补充 -->
+  </app-modal>
+</app-page-container>

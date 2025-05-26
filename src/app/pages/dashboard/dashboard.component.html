@@ -1,0 +1,41 @@
+<app-page-container
+  [title]="pageTitle()"
+  [description]="pageDescription()">
+
+  <!-- 统计数据网格 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (stat of formattedStats(); track stat.id) {
+      <app-card>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-2xl font-bold" [class]="stat.colorClasses.text">
+              {{ stat.displayValue }}
+            </p>
+            <p class="text-sm text-gray-600">{{ stat.label }}</p>
+            @if (stat.trend) {
+              <p class="text-xs text-green-600 mt-1">{{ stat.trend }}</p>
+            }
+          </div>
+          <i [class]="stat.icon + ' text-3xl ' + stat.colorClasses.icon"></i>
+        </div>
+      </app-card>
+    }
+  </div>
+
+  <!-- 最近活动卡片 -->
+  <div class="mt-8">
+    <app-card title="最近活动">
+      <div class="space-y-4">
+        @for (activity of formattedActivities(); track activity.id; let last = $last) {
+          <div class="flex items-center gap-4" [class.pb-4]="!last" [class.border-b]="!last" [class.border-gray-100]="!last">
+            <div class="w-2 h-2 rounded-full" [class]="activity.dotColorClass"></div>
+            <div class="flex-1">
+              <p class="font-medium">{{ activity.message }}</p>
+              <p class="text-sm text-gray-600">{{ activity.timestamp }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </app-card>
+  </div>
+</app-page-container>
