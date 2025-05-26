@@ -1,0 +1,55 @@
+# Cursor Custom Instructions (中文)
+
+## 项目结构与文件组织 (Project Structure & File Organization)
+*   当生成或修改组件时，请严格遵循 `/src/app/` 下的目录结构规范：UI 组件放在 `components/`，布局组件放在 `layouts/`，页面组件放在 `pages/`。
+*   为可复用 UI 组件目录添加 `index.ts` 文件，并使用 Barrel 导出方式统一导出组件。
+*   文件命名遵循 kebab-case，如 `user-profile.component.ts`。
+*   全局 TypeScript 类型定义放在 `src/app/types/` 下。
+*   服务根据功能分类放在 `src/app/services/` 下 (e.g., `api/`, `state/`, `utils/`)。
+*   静态资源放在 `src/assets/` 下 (e.g., `images/`, `icons/`, `fonts/`)。
+*   避免创建过深的目录嵌套。
+*   新添加的依赖需要经过评估，包括包大小、维护状态、安全记录和兼容性。
+*   新依赖必须指定精确版本号。
+*   使用 `pnpm audit --fix` 修复已知漏洞。
+*   按需导入依赖，避免全量导入。
+*   为第三方库添加 TypeScript 类型定义。
+*   处理依赖加载错误并提供降级方案。
+
+## 代码质量 (Code Quality)
+*   遵循 SOLID 原则。
+*   严格使用 TypeScript 进行类型定义，包括接口、类型别名、联合类型和泛型约束。
+*   函数签名清晰，必要时使用函数重载。
+*   实现统一的错误处理机制，使用 `ErrorHandlerService` 记录、通知和报告错误。
+*   在可能出现错误的组件中使用错误边界组件 (`ErrorBoundaryComponent`)。
+*   为组件和服务添加清晰的文档注释。
+*   充分利用 TypeScript 的类型系统确保类型安全。
+
+## Tailwind CSS
+*   所有样式必须使用 Tailwind CSS 实用工具类实现。
+*   组件的 `.css` 样式文件必须保持为空，不允许编写自定义 CSS。
+*   使用设计系统定义的颜色变量，如 `bg-primary-500`, `text-success-800`, `border-stroke-soft-200` 等。
+*   遵循 Tailwind CSS 响应式设计实现。
+*   使用 Tailwind 类名组织和管理样式。
+
+## Angular 框架 (Angular Framework)
+*   遵循 Angular 特定原则：信号优先、组件单一职责、服务职责分离、依赖注入。
+*   使用 Angular CLI 生成组件时，遵循文件路径约定。
+*   严格使用 Signal API 进行状态管理和数据流控制。
+*   使用 `input()` 函数替代 `@Input()` 装饰器。
+*   使用 `output()` 函数替代 `@Output()` 装饰器和 EventEmitter。
+*   使用 `model()` 函数创建可双向绑定的信号。
+*   使用 `signal()` 管理组件内部状态。
+*   使用 `computed()` 创建派生状态和计算属性。
+*   使用 `effect()` 处理副作用。
+*   更新 Signal 集合数据时，使用不可变方式创建新数组（`[...current, newItem]` 或 `current.map(...)`）。
+*   在 `computed` 或 `effect` 中需要访问非响应式值时，使用 `untracked()` 避免不必要的依赖。
+*   组件使用 `ChangeDetectionStrategy.OnPush`。
+*   遵循组件分类（UI, Layout, Business）及其职责。
+*   组件代码结构清晰：Signal 状态、计算属性、输入输出、生命周期钩子、私有辅助方法和公共方法。
+*   服务代码结构：公共 API 和私有方法。
+*   类名遵循 PascalCase，如 `UserProfileComponent`。
+*   Angular 选择器使用 'app' 前缀 + kebab-case，如 `app-user-profile`。
+*   变量和方法使用 camelCase。
+*   优先使用函数式依赖注入 (`inject()`)。
+*   优先在组件模板中使用 Angular Control Flow。
+*   生成的代码必须符合项目配置的 eslint 规则。
