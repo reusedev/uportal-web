@@ -1,6 +1,6 @@
 {
-  "/api": {
-    "target": " http://172.17.129.204:9081",
+  "/admin": {
+    "target": "http://172.17.129.178:8098",
     "changeOrigin": true,
     "secure": false
   }

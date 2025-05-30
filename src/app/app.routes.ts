@@ -32,7 +32,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/user/user-management/user-detail/user-detail.component').then(m => m.UserDetailComponent)
       },
       {
-        path: 'admin/management',
+        path: 'account/management',
         loadComponent: () => import('./pages/admin/admin-management/admin-management.component').then(m => m.AdminManagementComponent)
       },
       {
@@ -47,7 +47,7 @@ export const routes: Routes = [
       },
         { path: '', redirectTo: 'user/management', pathMatch: 'full' },
     ],
-    //  canActivate: [ authGuard ],
+     canActivate: [ authGuard ],
   },
 
   {

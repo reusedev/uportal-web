@@ -80,6 +80,6 @@ export class LayoutComponent implements OnInit {
   }
 
   navigateToAdminManagement(): void {
-    this.router.navigate(['/admin/management']);
+    this.router.navigate(['/account/management']);
   }
 }
