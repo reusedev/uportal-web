@@ -6,9 +6,10 @@ interface TokenTask {
   token_reward: number;
   daily_limit: number;
   interval_seconds: number;
-  valid_date: string[];
   repeatable: number; // 0: 不可重复, 1: 可重复
   status: number; // 0: 禁用, 1: 启用
+  valid_from:string;
+  valid_to:string;
 }
 
 // 代币消费特性数据接口

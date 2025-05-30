@@ -12,11 +12,8 @@ export const authHttpInterceptor: HttpInterceptorFn = (req, next) => {
   const token = auth.get();
 
   if (token) {
-    const payload = auth.decode(token);
     Object.assign(headers, {
       'Authorization': `Bearer ${token}`,
-      'Sub': payload?.sub,
-      'Aud': payload?.aud,
     });
   }
   const url = new URL(req.url, window.location.origin);

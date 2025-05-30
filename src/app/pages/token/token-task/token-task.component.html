@@ -80,8 +80,10 @@
 
           <!-- 卡片内容 -->
           <div class="px-5 py-4 flex-grow">
-            <div class="text-xs text-gray-500 mb-2">
-              {{ (task.valid_date[0]) }} ~ {{ (task.valid_date[1]) }}
+            <div  class="text-xs text-gray-500 mb-2">
+              <span> {{ task.valid_from }}</span>
+              <span>~</span>
+              <span>{{ (task.valid_to) || '无限' }}</span>
             </div>
 
 

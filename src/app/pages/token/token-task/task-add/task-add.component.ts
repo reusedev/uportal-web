@@ -45,11 +45,17 @@ export class TaskAddComponent implements OnInit {
           this.task.interval_seconds,
           [Validators.required, Validators.min(0)],
         ],
-        valid_date: [
-          this.task.valid_date.map((date) =>
-            parse(date, 'yyyy-MM-dd', new Date())
-          ),
+
+        valid_from: [
+          this.task.valid_from
+            ? parse(this.task.valid_from, 'yyyy-MM-dd', new Date())
+            : null,
           [Validators.required],
+        ],
+        valid_to: [
+          this.task.valid_to
+            ? parse(this.task.valid_to, 'yyyy-MM-dd', new Date())
+            : null,
         ],
         repeatable: [this.task.repeatable, [Validators.required]],
         status: [this.task.status], // 默认为禁用状态
@@ -61,7 +67,8 @@ export class TaskAddComponent implements OnInit {
         token_reward: [null, [Validators.required, Validators.min(1)]],
         daily_limit: [null, [Validators.required, Validators.min(1)]],
         interval_seconds: [null, [Validators.required, Validators.min(0)]],
-        valid_date: [[], [Validators.required]],
+        valid_from: [null, [Validators.required]],
+        valid_to: [null],
         repeatable: [1, [Validators.required]],
         status: [0], // 默认为禁用状态
       });
@@ -76,11 +83,12 @@ export class TaskAddComponent implements OnInit {
     if (this.validateForm.valid) {
       this.loading = true;
 
-      const { valid_date } = this.validateForm.value;
-      const dates = valid_date.map((item: Date) => format(item, 'yyyy-MM-dd'));
+      const { valid_from, valid_to } = this.validateForm.value;
+
       const formData = {
         ...this.validateForm.value,
-        valid_date: dates,
+        valid_from: format(valid_from, 'yyyy-MM-dd'),
+        valid_to: valid_to ? format(valid_to, 'yyyy-MM-dd') : null,
       };
 
       if (this.task) {

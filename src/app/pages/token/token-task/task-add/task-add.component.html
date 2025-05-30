@@ -45,9 +45,15 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired>有效期</nz-form-label>
-        <nz-form-control nzErrorTip="请选择有效期">
-          <nz-range-picker formControlName="valid_date" class="w-full"></nz-range-picker>
+        <nz-form-label nzRequired>开始时间</nz-form-label>
+        <nz-form-control nzErrorTip="请选择开始时间">
+          <nz-date-picker formControlName="valid_from" class="w-full"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label >结束时间</nz-form-label>
+        <nz-form-control >
+          <nz-date-picker formControlName="valid_to" class="w-full"></nz-date-picker>
         </nz-form-control>
       </nz-form-item>
 
