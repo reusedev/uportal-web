@@ -1,0 +1,130 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<div class="flex h-screen w-full bg-gray-50 bg-white">
+  <!-- 侧边栏 -->
+  <nz-sider class="group/sidebar px-4 relative bg-white border-r border-gray-200 shadow-sm overflow-hidden"
+    [nzCollapsed]="isSidebarCollapsed" [nzWidth]="272" [nzCollapsedWidth]="100" (mouseenter)="sidebarHover = true"
+    (mouseleave)="sidebarHover = false">
+
+    <div class="sidebar-container">
+      <!-- 悬浮切换按钮 -->
+      <button nz-button nzType="default" nzShape="circle"
+        class="absolute top-1/2 -right-3 z-20 transform -translate-y-1/2 bg-white border border-gray-200 shadow-lg p-2 opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-200"
+        (click)="toggleSidebarCollapsed()" [class.hidden]="!sidebarHover"
+        [attr.aria-label]="isSidebarCollapsed ? '展开侧边栏' : '收起侧边栏'">
+        <i nz-icon [nzType]="isSidebarCollapsed ? 'right' : 'left'" nzTheme="outline" class="text-xl text-gray-500"></i>
+      </button>
+
+      <!-- 侧边栏头部 -->
+      <div class="flex items-center gap-3 py-4  border-b border-gray-100 justify-center"
+        [ngClass]="isSidebarCollapsed ? 'px-0 py-4' : ''">
+        <nz-avatar [nzSize]="40" nzIcon="user" class="bg-purple-100 flex items-center justify-center">
+          <img src="/assets/logo.svg" alt="Logo" class="h-8 w-8" />
+        </nz-avatar>
+        <div *ngIf="!isSidebarCollapsed" class="flex flex-col">
+          <span class="text-lg font-semibold text-gray-900">Synergy</span>
+          <span class="text-xs text-gray-400">HR Management</span>
+        </div>
+      </div>
+
+      <!-- 主导航 -->
+      <div class="sidebar-content py-4 px-2 overflow-y-auto">
+        <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isSidebarCollapsed"
+          class="border-0 bg-transparent menu-custom">
+
+          <!-- 所有菜单项按原始顺序显示 -->
+          <ng-container *ngFor="let item of sidebarMenu">
+            <!-- 单级菜单项 -->
+            <li nz-menu-item *ngIf="!item.children || item.children.length === 0" [routerLink]="item.link"
+              [routerLinkActive]="'ant-menu-item-selected'" [routerLinkActiveOptions]="{ exact: false }">
+              <span nz-icon [nzType]="item.icon" nzTheme="outline" class="text-xl"></span>
+              @if (!isSidebarCollapsed) {
+              <span>{{ item.label }}</span>
+              }
+            </li>
+
+            <!-- 多级菜单项 -->
+            @if (!isSidebarCollapsed) {
+            <li nz-submenu *ngIf="item.children && item.children.length > 0"
+              [nzOpen]="!isSidebarCollapsed ? true : false" [nzTitle]="item.label" [nzIcon]="item.icon">
+
+              <ul>
+                <li nz-menu-item *ngFor="let child of item.children" [routerLink]="child.link"
+                  [routerLinkActive]="'ant-menu-item-selected'" [routerLinkActiveOptions]="{ exact: false }">
+                  <span>{{ child.label }}</span>
+                </li>
+              </ul>
+            </li>
+            } @else {
+            <li nz-submenu *ngIf="item.children && item.children.length > 0"
+              [nzOpen]="!isSidebarCollapsed ? true : false" [nzTitle]="item.label" [nzIcon]="item.icon"
+              [class]="isSidebarCollapsed ? 'collapsed-close' : 'collapsed-open'">
+
+              <ul>
+                <li nz-menu-item *ngFor="let child of item.children" [routerLink]="child.link"
+                  [routerLinkActive]="'ant-menu-item-selected'" [routerLinkActiveOptions]="{ exact: false }">
+                  <span>{{ child.label }}</span>
+                </li>
+              </ul>
+            </li>
+
+
+            }
+
+          </ng-container>
+        </ul>
+      </div>
+
+      <!-- 侧边栏底部用户卡片 -->
+      <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" [nzPlacement]="'topCenter'"
+        class="sidebar-footer  py-4 border-t border-gray-100 flex items-center gap-3 justify-center"
+        [ngClass]="isSidebarCollapsed ? 'px-0 py-4' : ''">
+        <nz-avatar [nzSize]="40" nzIcon="user" class="bg-yellow-100 overflow-hidden flex-shrink-0">
+          <img src="/assets/avatar.png" alt="Sophia Williams" class="h-full w-full object-cover" />
+        </nz-avatar>
+        <div *ngIf="!isSidebarCollapsed" class="flex-1">
+          <div class="flex items-center gap-1">
+            <span class="text-sm font-medium text-gray-900">{{userInfo?.username || 'Admin'}}</span>
+            <span nz-icon nzType="safety-certificate" nzTheme="fill" class="text-blue-400 text-xs"></span>
+          </div>
+          <span class="text-xs text-gray-400">{{userInfo?.role || 'Admin'}}</span>
+        </div>
+        <button *ngIf="!isSidebarCollapsed" nz-button nzType="text" class="rounded-lg p-2 hover:bg-gray-100">
+          <span nz-icon nzType="right" nzTheme="outline" class="text-lg text-gray-500"></span>
+        </button>
+      </div>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul style="border-radius: 8px;padding: 8px;" nz-menu>
+            <li nz-menu-item (click)="navigateToAdminManagement()">
+            <div class="flex gap-2">
+              <nz-icon nzType="user" nzTheme="outline" />
+              <span>账户管理</span>
+            </div>
+          </li>
+          <li nz-menu-divider class="my-2"></li>
+          <li nz-menu-item (click)="navigateToChangePassword()">
+            <div class="flex gap-2">
+              <nz-icon nzType="lock" nzTheme="outline" />
+              <span>修改密码</span>
+            </div>
+          </li>
+           <li nz-menu-divider class="my-2"></li>
+          <li (click)="logout()" nz-menu-item>
+            <div class="flex gap-2">
+              <nz-icon nzType="logout" nzTheme="outline" />
+              <span>退出登陆</span>
+            </div>
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </nz-sider>
+
+  <!-- 主区 -->
+  <div class="main-content-wrapper w-full" [class.collapsed]="isSidebarCollapsed">
+    <nz-content class="flex-1 min-w-0 overflow-auto bg-gray-50 px-6 custom-scrollbar bg-white">
+      <router-outlet></router-outlet>
+    </nz-content>
+  </div>
+</div>

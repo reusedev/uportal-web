@@ -1,0 +1,21 @@
+.view-mode-btn {
+  min-width: 40px;
+  padding: 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:host ::ng-deep .ant-table-thead > tr > th {
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 500;
+}
+
+:host ::ng-deep .ant-pagination-item-active {
+  border-color: #1677ff;
+}
+
+:host ::ng-deep .ant-pagination-item-active a {
+  color: #1677ff;
+}

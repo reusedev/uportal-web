@@ -1,0 +1,80 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="container">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>任务名称</nz-form-label>
+        <nz-form-control nzErrorTip="请输入任务名称">
+          <input nz-input formControlName="task_name" placeholder="请输入任务名称" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>任务描述</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="task_desc" placeholder="请输入任务描述"
+            [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="grid grid-cols-2 gap-x-4">
+        <nz-form-item>
+          <nz-form-label nzRequired>代币奖励</nz-form-label>
+          <nz-form-control nzErrorTip="请输入代币奖励数量">
+            <nz-input-number formControlName="token_reward" [nzMin]="1" [nzStep]="1" [nzPlaceHolder]="'请输入代币奖励数量'"
+              class="w-full"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzRequired>每日限制</nz-form-label>
+          <nz-form-control nzErrorTip="请输入每日可完成次数">
+            <nz-input-number formControlName="daily_limit" [nzMin]="1" [nzStep]="1" [nzPlaceHolder]="'请输入每日可完成次数'"
+              class="w-full"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>间隔时间（秒）</nz-form-label>
+        <nz-form-control nzErrorTip="请输入任务间隔时间">
+          <nz-input-number formControlName="interval_seconds" [nzMin]="0" [nzStep]="1" [nzPlaceHolder]="'请输入任务间隔时间'"
+            class="w-full"></nz-input-number>
+          <div class="text-gray-400 mt-1 text-xs">0 表示无间隔限制，86400 = 1天，3600 = 1小时</div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>有效期</nz-form-label>
+        <nz-form-control nzErrorTip="请选择有效期">
+          <nz-range-picker formControlName="valid_date" class="w-full"></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>是否可重复</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group formControlName="repeatable">
+            <label nz-radio [nzValue]="1">可重复</label>
+            <label nz-radio [nzValue]="0">不可重复</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="false">
+        <nz-form-label nzRequired>状态</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group formControlName="status">
+            <label nz-radio [nzValue]="1">启用</label>
+            <label nz-radio [nzValue]="0">禁用</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-spin>
+</div>
+
+<div class="button">
+  <button [disabled]="loading" (click)="close()" nz-button type="reset" nzType="default" nzSize="default">取消</button>
+  <button [disabled]="loading" (click)="submit()" nz-button nzType="primary" nzSize="default">提交</button>
+</div>

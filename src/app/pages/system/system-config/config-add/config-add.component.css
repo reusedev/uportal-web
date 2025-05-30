@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .ant-form-item-label > label {
+  font-weight: 500;
+  color: #374151;
+}
+
+:host ::ng-deep .ant-form-item-explain-error {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+:host ::ng-deep .ant-form-item {
+  margin-bottom: 20px;
+}
+
+.button{
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  border-top: 1px solid #E1E4EA;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+
+}
+
+.button  button {
+    flex: 1;
+  }
+
+.container{
+  height: calc(100vh - 130px);
+  padding: 20px;
+  overflow-y: auto;
+}

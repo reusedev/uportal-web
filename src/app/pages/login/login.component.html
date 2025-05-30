@@ -1,0 +1,58 @@
+<main class="main-content mt-0 min-h-screen bg-white flex">
+  <section class="w-full flex">
+    <div class="flex flex-wrap w-full justify-between">
+      <!-- 左侧登录表单区 -->
+      <!-- 调整为 flex item，并使其在大屏下占据左侧满高，内部 flex 居中 -->
+      <div class="w-full lg:w-1/2 flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 min-h-screen lg:min-h-0">
+        <!-- 表单卡片，限制最大宽度并居中 -->
+        <div class="w-full max-w-sm bg-white rounded-2xl shadow-xl overflow-hidden">
+           <!-- 卡片头部 -->
+          <div class="px-8  text-start">
+            <h4 class="text-[1.5rem] font-bold text-gray-900 mb-1">欢 迎</h4>
+            <p class="text-gray-500 mb-0 text-[1rem]">请输入账号和密码登录系统</p>
+          </div>
+          <!-- 卡片主体 -->
+          <div class="px-8 py-6">
+            <form nz-form [nzLayout]="'vertical'" class="space-y-5" [formGroup]="loginForm" (ngSubmit)="submit()">
+              <nz-form-item>
+                <!-- 账号输入框 -->
+                <nz-form-control>
+                  <input nz-input type="text" class="w-full px-4 py-3 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white" placeholder="账号" aria-label="账号" formControlName="username" />
+                </nz-form-control>
+              </nz-form-item>
+
+              <nz-form-item>
+                <!-- 密码输入框 -->
+                <nz-form-control>
+                  <input nz-input type="password" class="w-full px-4 py-3 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white" placeholder="密码" aria-label="密码" formControlName="password" />
+                </nz-form-control>
+              </nz-form-item>
+
+              <!-- 登录按钮 -->
+              <nz-form-item class="text-center pt-4">
+                <nz-form-control>
+                   <button [nzLoading]='loading' class="btn-login" nz-button nzType="primary" type="submit">登 陆</button>
+                </nz-form-control>
+              </nz-form-item>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧品牌/宣传区 -->
+      <!-- 小屏幕下隐藏，大屏幕下占右侧 50% -->
+      <div class="hidden p-4 lg:flex lg:w-1/2 relative items-center justify-center">
+           <div class="img-bg relative w-full h-full flex flex-col items-center justify-center overflow-hidden rounded-2xl">
+              <!-- 渐变遮罩 -->
+              <div class="absolute inset-0 bg-gradient-to-br from-purple-600/80 to-primary-500/80"></div>
+              <!-- 文字内容 -->
+              <div class="relative z-10 text-center px-12 py-12">
+                <h4 class="mt-5 text-white text-[1.5rem] font-bold mb-4">“专注是新的生产力”</h4>
+                <p class="text-white text-[1rem]">越是看似轻松的成果，背后往往付出了更多努力。</p>
+              </div>
+           </div>
+        </div>
+      </div>
+  </section>
+</main>

@@ -1,0 +1,7 @@
+{
+  "/admin": {
+    "target": "https://m1.apifoxmock.com/m1/6430553-6127987-default",
+    "changeOrigin": true,
+    "secure": false
+  }
+}

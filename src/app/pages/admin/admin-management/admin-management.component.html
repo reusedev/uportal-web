@@ -1,0 +1,119 @@
+<div class="flex justify-between items-center py-4 border-b border-gray-100">
+  <div class="flex gap-4">
+    <nz-avatar [nzSize]="40" nzIcon="user" class="bg-yellow-100 overflow-hidden flex-shrink-0">
+      <img src="/assets/avatar.png" alt="Sophia Williams" class="h-full w-full object-cover" />
+    </nz-avatar>
+    <div class="flex flex-col gap-0">
+      <div class="text-lg font-semibold text-[#0A0D14]">
+        {{userInfo?.username || 'Admin'}}
+        <span nz-icon nzType="safety-certificate" nzTheme="fill" class="text-blue-400 text-xs"></span>
+      </div>
+      <div class="text-xs text-[#6B7280]">{{userInfo?.role || 'Admin'}}</div>
+    </div>
+  </div>
+
+   <button nz-button nzType="primary" (click)="addAdmin()" class="bg-purple-600 border-purple-600 hover:bg-purple-700 hover:border-purple-700">
+        <i nz-icon nzType="plus"></i>添加账户
+      </button>
+</div>
+
+<!-- 筛选区域 -->
+<div class="py-4 px-4 rounded-md mt-6 mb-4 border border-gray-200">
+  <div class="flex flex-wrap gap-6 items-end">
+    <div class="flex flex-col gap-1">
+      <input nz-input placeholder="请输入用户名" [(ngModel)]="filters.username" class="w-48 rounded-[4px]" />
+    </div>
+    <div class="flex flex-col gap-1">
+      <nz-select class="w-32 rounded-[4px]" nzPlaceHolder="请选择角色" [(ngModel)]="filters.role">
+        <nz-option *ngFor="let option of roleOptions" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+      </nz-select>
+    </div>
+    <div class="flex flex-col gap-1">
+      <nz-select class="w-32 rounded-[4px]" nzPlaceHolder="请选择状态" [(ngModel)]="filters.status">
+        <nz-option *ngFor="let option of statusOptions" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+      </nz-select>
+    </div>
+    <div class="flex gap-2">
+      <button nz-button nzType="primary" (click)="applyFilters()">
+        <nz-icon nzType="search" nzTheme="outline"></nz-icon>
+        查询
+      </button>
+      <button nz-button nzType="default" (click)="resetFilters()">
+        <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
+        重置
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 管理员列表 -->
+<div class="py-4">
+  <nz-spin [nzSpinning]="loading">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-medium text-[#0A0D14]">账户列表</h2>
+
+    </div>
+
+    <div class="overflow-hidden bg-white rounded-lg border border-gray-200 shadow-sm">
+      <nz-table
+        #adminTable
+        [nzData]="adminList"
+        [nzLoading]="loading"
+        [nzTotal]="total"
+        [nzPageIndex]="pageIndex"
+        [nzPageSize]="pageSize"
+        [nzShowSizeChanger]="false"
+        [nzFrontPagination]="false"
+        (nzPageIndexChange)="onPageChange($event)"
+        nzShowPagination
+        class="w-full"
+      >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th class="w-[150px]">角色</th>
+        <th>状态</th>
+        <th>创建时间</th>
+        <th>最后登录时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let admin of adminTable.data">
+        <td>{{ admin.admin_id }}</td>
+        <td>{{ admin.username }}</td>
+        <td>{{ getRoleLabel(admin.role) }}</td>
+        <td>
+          <span [ngClass]="getStatusClass(admin.status)">
+            {{ getStatusLabel(admin.status) }}
+          </span>
+        </td>
+        <td>{{ admin.created_at | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>{{ admin.last_login_at | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>
+          <div class="flex gap-2">
+            <button nz-button nzType="primary" nzSize="small" class="bg-purple-600 border-purple-600 hover:bg-purple-700 hover:border-purple-700" (click)="editAdmin(admin)">编辑</button>
+            <button
+              nz-button
+              nzType="primary"
+              nzDanger
+              nzSize="small"
+              nz-popconfirm
+              nzPopconfirmTitle="确定要删除该管理员吗?"
+              nzPopconfirmPlacement="top"
+              (nzOnConfirm)="deleteAdmin(admin.admin_id)"
+            >
+              删除
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="adminTable.data.length === 0">
+        <td colspan="7" class="text-center py-8 text-gray-500">暂无数据</td>
+      </tr>
+    </tbody>
+  </nz-table>
+    </div>
+  </nz-spin>
+</div>

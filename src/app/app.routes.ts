@@ -1,17 +1,57 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './layouts';
-import { TokenComponent } from './pages/token/token.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { LayoutComponent } from './layouts/layout.component';
+import { authGuard } from './guard/auth.guard';
+import { ChangePasswordPageComponent } from './pages/change-password-page/change-password-page.component';
+import { EnterOldPasswordComponent } from './components/enter-old-password/enter-old-password.component';
+import { EnterNewPasswordComponent } from './components/enter-new-password/enter-new-password.component';
+import { ConfirmNewPasswordComponent } from './components/confirm-new-password/confirm-new-password.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', component: DashboardComponent },
-      { path: 'token', component: TokenComponent },
-      // 其他路由将在这里添加
-      { path: '**', redirectTo: 'dashboard' },
-    ]
+      {
+        path: 'token/task',
+        loadComponent: () => import('./pages/token/token-task/token-task.component').then(m => m.TokenTaskComponent)
+      },
+      {
+        path: 'token/consume-rules',
+        loadComponent: () => import('./pages/token/token-consume-rules/token-consume-rules.component').then(m => m.TokenConsumeRulesComponent)
+      },
+      {
+        path: 'system/config',
+        loadComponent: () => import('./pages/system/system-config/system-config.component').then(m => m.SystemConfigComponent)
+      },
+      {
+        path: 'user/management',
+        loadComponent: () => import('./pages/user/user-management/user-management.component').then(m => m.UserManagementComponent)
+      },
+      {
+        path: 'user/management/:id',
+        loadComponent: () => import('./pages/user/user-management/user-detail/user-detail.component').then(m => m.UserDetailComponent)
+      },
+      {
+        path: 'admin/management',
+        loadComponent: () => import('./pages/admin/admin-management/admin-management.component').then(m => m.AdminManagementComponent)
+      },
+      {
+        path: 'change-password',
+        component: ChangePasswordPageComponent,
+        children: [
+          { path: '', redirectTo: 'step1', pathMatch: 'full' },
+          { path: 'step1', component: EnterOldPasswordComponent },
+          { path: 'step2', component: EnterNewPasswordComponent },
+          { path: 'step3', component: ConfirmNewPasswordComponent },
+        ]
+      },
+        { path: '', redirectTo: 'user/management', pathMatch: 'full' },
+    ],
+    //  canActivate: [ authGuard ],
+  },
+
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
   }
 ];

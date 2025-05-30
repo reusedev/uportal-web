@@ -1,0 +1,129 @@
+<!-- user-management.component.html -->
+<div class="flex justify-between items-center py-4 border-b border-gray-100">
+  <div class="flex gap-4">
+    <div
+      class="w-10 h-10 flex justify-center items-center rounded-full border border-[#EBEBEB] bg-white shadow-[0_1px_2px_0_rgba(10,13,20,0.03)]">
+      <nz-icon class="text-[16px]" nzType="team" nzTheme="outline" />
+    </div>
+    <div class="flex flex-col gap-0">
+      <div class="text-lg font-semibold text-[#0A0D14]">用户管理</div>
+      <div class="text-xs text-[#6B7280]">管理系统用户和代币余额</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 筛选器 -->
+<div class="rounded-md my-6">
+  <div class="flex flex-wrap gap-6 items-end">
+    <div class="flex flex-col gap-1">
+      <!-- <span class="text-xs font-medium text-gray-500">用户状态</span> -->
+      <nz-select  [(ngModel)]="filters.status" nzPlaceHolder="全部状态" class="w-32 rounded-[4px]">
+        <nz-option [nzValue]="null" nzLabel="全部状态"></nz-option>
+        <nz-option [nzValue]="1" nzLabel="启用"></nz-option>
+        <nz-option [nzValue]="0" nzLabel="禁用"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <!-- <span class="text-xs font-medium text-gray-500">手机号</span> -->
+      <input
+        nz-input
+        [(ngModel)]="filters.phone"
+        placeholder="请输入手机号"
+        class="w-48 rounded-[4px]"
+      />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <!-- <span class="text-xs font-medium text-gray-500">用户昵称</span> -->
+      <input
+        nz-input
+        [(ngModel)]="filters.nickname"
+        placeholder="请输入用户昵称"
+        class="w-48 rounded-[4px]"
+      />
+    </div>
+
+    <div class="flex gap-2">
+      <button nz-button nzType="primary" (click)="applyFilters()">
+        <nz-icon nzType="search" nzTheme="outline"></nz-icon>
+        查询
+      </button>
+      <button nz-button nzType="default" (click)="resetFilters()">
+        <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
+        重置
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 用户列表 -->
+<div>
+  <nz-spin [nzSpinning]="loading">
+    <div *ngIf="viewMode === 'table'" class="overflow-hidden bg-white rounded-lg border border-gray-200 shadow-sm">
+      <nz-table
+        #basicTable
+        [nzData]="filteredUsers"
+        [nzLoading]="loading"
+        [nzFrontPagination]="false"
+        [nzTotal]="total"
+        [nzPageIndex]="pageIndex"
+        [nzPageSize]="pageSize"
+        (nzPageIndexChange)="onPageIndexChange($event)"
+        (nzPageSizeChange)="onPageSizeChange($event)"
+        (nzQueryParams)="onQueryParamsChange($event)"
+        class="w-full"
+      >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>用户信息</th>
+            <th nzColumnKey="token_balance" [nzSortFn]="true">代币余额</th>
+            <th>注册时间</th>
+            <th>最后登录</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of basicTable.data">
+            <td>{{ user.user_id }}</td>
+            <td class="w-[200px]">
+              <div class="flex items-center">
+                <nz-avatar [nzSize]="32" [nzSrc]="user.avatar_url || '/assets/avatar.png'" class="mr-3"></nz-avatar>
+                <div>
+                  <div class="font-medium">{{ user.nickname }}</div>
+                  <div class="text-xs text-gray-500">
+                    <span class="mr-2">{{ user.phone }}</span>
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    <span>{{ user.email }}</span>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="text-blue-600 font-medium">{{ user.token_balance }}</span>
+            </td>
+            <td>{{ user.created_at | date:'yyyy-MM-dd' }}</td>
+            <td>{{ user.last_login_at | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>
+              <nz-tag [nzColor]="user.status === 1 ? 'success' : 'error'">
+                {{ user.status === 1 ? '启用' : '禁用' }}
+              </nz-tag>
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <button nz-button nzType="primary" nzSize="small" (click)="viewUserDetail(user)">
+                  <nz-icon nzType="eye" nzTheme="outline"></nz-icon>
+                  查看
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-spin>
+</div>

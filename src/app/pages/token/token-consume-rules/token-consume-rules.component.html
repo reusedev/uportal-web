@@ -1,0 +1,191 @@
+<!-- token-consume-rules.component.html -->
+<div class="flex justify-between items-center py-4 border-b border-gray-100">
+  <div class="flex gap-4">
+    <div
+      class="w-10 h-10 flex justify-center items-center rounded-full border border-[#EBEBEB] bg-white shadow-[0_1px_2px_0_rgba(10,13,20,0.03)]">
+      <nz-icon class="text-[16px]" nzType="wallet" nzTheme="outline" />
+    </div>
+    <div class="flex flex-col gap-0">
+      <div class="text-lg font-semibold text-[#0A0D14]">代币消费规则</div>
+      <div class="text-xs text-[#6B7280]">定义代币消费的规则和规则</div>
+    </div>
+  </div>
+
+  <div class="flex gap-2">
+    <div class="flex items-center bg-white rounded-md border border-gray-200 px-3  max-w-xs">
+      <nz-icon nzType="search" class="text-gray-400 mr-2"></nz-icon>
+      <input
+        nz-input
+        [(ngModel)]="searchKeyword"
+        placeholder="搜索规则名称或代码"
+        class="border-0 px-0 py-0 text-sm"
+        nzBorderless
+      />
+      <button
+        *ngIf="searchKeyword"
+        nz-button
+        nzType="text"
+        nzSize="small"
+        class="ml-1 flex items-center text-gray-400 hover:text-gray-600"
+        (click)="searchKeyword = ''"
+      >
+        <nz-icon nzType="close-circle" nzTheme="fill"></nz-icon>
+      </button>
+    </div>
+
+    <nz-button-group>
+      <button
+        nz-button
+        [nzType]="viewMode === 'card' ? 'primary' : 'default'"
+        class="view-mode-btn"
+        (click)="viewMode = 'card'"
+      >
+        <nz-icon nzType="appstore" nzTheme="outline"></nz-icon>
+      </button>
+      <button
+        nz-button
+        [nzType]="viewMode === 'table' ? 'primary' : 'default'"
+        class="view-mode-btn"
+        (click)="viewMode = 'table'"
+      >
+        <nz-icon nzType="bars" nzTheme="outline"></nz-icon>
+      </button>
+    </nz-button-group>
+
+    <button nz-button nzType="primary" (click)="addFeature()">
+      <nz-icon nzType="plus" nzTheme="outline" />
+      新建规则
+    </button>
+  </div>
+</div>
+
+<!-- 规则列表 -->
+<div class="py-6">
+  <nz-spin [nzSpinning]="loading">
+    <!-- 卡片视图模式 -->
+    <div *ngIf="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- 规则卡片 -->
+      @for (feature of filteredFeatures; track feature.feature_id) {
+      <nz-ribbon [nzText]="feature.status === 1 ? '启用' : '禁用'" [nzColor]="feature.status === 1 ? 'green' :'red'">
+        <div
+          class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+          <!-- 卡片头部 -->
+          <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+            <div class="flex items-center">
+              <nz-icon nzType="tag" nzTheme="twotone" class="text-lg mr-2" [nzTwotoneColor]="'#52c41a'"></nz-icon>
+              <span class="text-base font-medium">{{ feature.feature_name }}</span>
+            </div>
+            <!-- <nz-tag [nzColor]="'cyan'">{{ feature.feature_code }}</nz-tag> -->
+          </div>
+
+          <!-- 卡片内容 -->
+          <div class="px-5 py-4 flex-grow">
+            <div class="flex items-center mb-3">
+              <nz-icon nzType="pay-circle" nzTheme="outline" class="mr-2 text-red-500 text-lg"></nz-icon>
+              <span class="text-gray-700 text-lg font-semibold">{{ feature.token_cost }} 代币</span>
+            </div>
+             <div class="flex items-center mb-3">
+              <nz-icon nzType="code" nzTheme="outline" class="mr-2 text-gray-700 text-lg"></nz-icon>
+              <span class="text-gray-700 text-lg font-semibold">{{ feature.feature_code }}</span>
+            </div>
+
+            <div class="mt-3">
+              <p nz-tooltip [nzTooltipTitle]="feature.feature_desc" class="text-gray-600">
+                {{ feature.feature_desc }}
+              </p>
+            </div>
+          </div>
+
+          <!-- 卡片底部 -->
+          <div class="px-5 py-3 bg-gray-50 flex justify-between border-t border-gray-100">
+            <button (click)="editFeature(feature)" nz-button nzType="text"
+              class="text-blue-500 hover:text-blue-600 flex items-center">
+              <nz-icon nzType="edit" nzTheme="outline" class="mr-1"></nz-icon>
+              <span>编辑</span>
+            </button>
+
+            <button nz-button nz-popconfirm [nzPopconfirmTitle]="feature.status === 1 ? '确定要禁用此规则吗?' : '确定要启用此规则吗?'"
+              (nzOnConfirm)="toggleFeatureStatus(feature)" class="flex items-center"
+              [ngClass]="feature.status === 1 ? 'text-red-500 hover:text-red-600' : 'text-green-500 hover:text-green-600'"
+              nzType="text">
+              <nz-icon [nzType]="feature.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline" class="mr-1"></nz-icon>
+              <span>{{ feature.status === 1 ? '禁用' : '启用' }}</span>
+            </button>
+          </div>
+        </div>
+      </nz-ribbon>
+      }
+
+      <!-- 无数据时显示 -->
+      <div *ngIf="filteredFeatures.length === 0" class="col-span-full">
+        <nz-empty nzDescription="暂无规则数据" [nzNotFoundContent]="emptyTpl">
+          <ng-template #emptyTpl>
+            <span>{{ searchKeyword ? '没有找到匹配的规则' : '暂无规则数据，点击"新建规则"按钮创建' }}</span>
+          </ng-template>
+        </nz-empty>
+      </div>
+    </div>
+
+    <!-- 表格视图模式 -->
+    <div *ngIf="viewMode === 'table'" class="overflow-hidden bg-white rounded-lg border border-gray-200 shadow-sm">
+      <nz-table
+        #basicTable
+        [nzData]="filteredFeatures"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzPageSize]="10"
+        class="w-full"
+      >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>规则名称</th>
+            <th>规则代码</th>
+            <th>代币消费</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let feature of basicTable.data">
+            <td>{{ feature.feature_id }}</td>
+            <td>
+              <div class="flex items-center">
+                <nz-icon nzType="tag" nzTheme="twotone" class="mr-2" [nzTwotoneColor]="'#52c41a'"></nz-icon>
+                <span>{{ feature.feature_name }}</span>
+              </div>
+              <div class="text-xs text-gray-500 mt-1">{{ feature.feature_desc }}</div>
+            </td>
+            <td><nz-tag [nzColor]="'cyan'">{{ feature.feature_code }}</nz-tag></td>
+            <td class="font-semibold">{{ feature.token_cost }}</td>
+            <td>
+              <nz-tag [nzColor]="feature.status === 1 ? 'success' : 'error'">
+                {{ feature.status === 1 ? '启用' : '禁用' }}
+              </nz-tag>
+            </td>
+            <td>
+               <div class="flex gap-2">
+                <button nz-button nzType="primary" nzSize="small" (click)="editFeature(feature)">
+                  <nz-icon nzType="edit" nzTheme="outline"></nz-icon>
+                  编辑
+                </button>
+                <button
+                  nz-button
+                  nzType="default"
+                  [ngClass]="feature.status === 1 ? 'text-red-500 hover:text-red-600' : 'text-green-500 hover:text-green-600'"
+                  nzSize="small"
+                  nz-popconfirm
+                  [nzPopconfirmTitle]="feature.status === 1 ? '确定要禁用此规则吗?' : '确定要启用此规则吗?'"
+                  (nzOnConfirm)="toggleFeatureStatus(feature)"
+                >
+                  <nz-icon [nzType]="feature.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline"></nz-icon>
+                  {{ feature.status === 1 ? '禁用' : '启用' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-spin>
+</div>

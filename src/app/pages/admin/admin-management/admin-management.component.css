@@ -1,0 +1,21 @@
+/* 表格样式优化 */
+:host ::ng-deep .ant-table-thead > tr > th {
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+}
+
+:host ::ng-deep .ant-table-tbody > tr:hover > td {
+  background-color: #f3f4f6;
+}
+
+
+
+/* 其他样式优化 */
+.text-green-600 {
+  color: #059669;
+}
+
+.text-red-600 {
+  color: #dc2626;
+}

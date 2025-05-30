@@ -1,0 +1,24 @@
+.form-item {
+  margin-bottom: 1rem;
+}
+
+:host ::ng-deep .ant-input:hover {
+  border-color: #40a9ff;
+}
+
+:host ::ng-deep .ant-input:focus,
+:host ::ng-deep .ant-input-focused {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+:host ::ng-deep .ant-select:hover .ant-select-selector {
+  border-color: #40a9ff;
+}
+
+:host ::ng-deep .ant-select-focused .ant-select-selector,
+:host ::ng-deep .ant-select-selector:focus,
+:host ::ng-deep .ant-select-selector:active {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}

@@ -1,0 +1,237 @@
+<!-- user-detail.component.html -->
+<div class="user-detail-page p-6">
+  <!-- 面包屑导航 -->
+  <div class="mb-6">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/']"><nz-icon nzType="home"></nz-icon></a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/user/management']">用户管理</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        用户详情
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </div>
+
+  <!-- 标题和返回按钮 -->
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-semibold text-gray-800">用户详情</h1>
+    <button nz-button nzType="default" (click)="goBack()">
+      <nz-icon nzType="arrow-left"></nz-icon>
+      返回列表
+    </button>
+  </div>
+
+  <!-- 用户基本信息 -->
+  <nz-spin [nzSpinning]="userLoading">
+    <div class="bg-white p-6 rounded-lg border border-gray-200 mb-6">
+      <div class="flex justify-between items-start mb-6">
+        <div class="flex items-center">
+          <nz-avatar [nzSize]="64" [nzSrc]="userDetail?.avatar_url || '/assets/avatar.png'" class="mr-4"></nz-avatar>
+          <div>
+            <div class="flex items-center mb-1">
+              <h2 class="text-xl font-semibold text-gray-800 m-0">{{ userDetail?.nickname || '加载中...' }}</h2>
+              <nz-tag class="ml-3" [nzColor]="userDetail?.status === 1 ? 'success' : 'error'">
+                {{ userDetail?.status === 1 ? '启用' : '禁用' }}
+              </nz-tag>
+            </div>
+            <div class="flex gap-4 text-gray-500">
+              <span class="flex items-center">
+                <nz-icon nzType="phone" class="mr-1"></nz-icon>
+                {{ userDetail?.phone || '-' }}
+              </span>
+              <span class="flex items-center">
+                <nz-icon nzType="mail" class="mr-1"></nz-icon>
+                {{ userDetail?.email || '-' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button nz-button nzType="primary" (click)="adjustTokens()">
+            <nz-icon nzType="wallet" nzTheme="outline"></nz-icon>
+            调整代币
+          </button>
+
+          <button nz-button
+            nzType="default"
+            [nzDanger]="userDetail?.status === 1"
+            nz-popconfirm
+            [nzPopconfirmTitle]="userDetail?.status === 1 ? '确定要禁用此用户吗?' : '确定要启用此用户吗?'"
+            (nzOnConfirm)="toggleUserStatus()">
+            <nz-icon [nzType]="userDetail?.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline"></nz-icon>
+            {{ userDetail?.status === 1 ? '禁用用户' : '启用用户' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-500 mb-1">代币余额</span>
+          <div class="flex items-center">
+            <nz-icon nzType="pay-circle" nzTheme="outline" class="text-blue-500 mr-2 text-lg"></nz-icon>
+            <span class="text-xl font-semibold text-blue-600">{{ userDetail?.token_balance || 0 }}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-500 mb-1">注册时间</span>
+          <div class="flex items-center">
+            <nz-icon nzType="calendar" nzTheme="outline" class="text-gray-500 mr-2"></nz-icon>
+            <span class="text-gray-700">{{ userDetail?.created_at | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-500 mb-1">最后登录</span>
+          <div class="flex items-center">
+            <nz-icon nzType="login" nzTheme="outline" class="text-gray-500 mr-2"></nz-icon>
+            <span class="text-gray-700">{{ userDetail?.last_login_at | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-500 mb-1">语言偏好</span>
+          <span class="text-gray-700">{{ userDetail?.language || '-' }}</span>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-500 mb-1">认证方式</span>
+          <div class="flex flex-wrap gap-1">
+            <nz-tag *ngFor="let provider of userDetail?.auth_providers">{{ provider }}</nz-tag>
+            <span *ngIf="!userDetail?.auth_providers?.length" class="text-gray-500">-</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-500 mb-1">更新时间</span>
+          <span class="text-gray-700">{{ userDetail?.updated_at | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+        </div>
+      </div>
+    </div>
+  </nz-spin>
+
+  <!-- 详细信息标签页 -->
+  <nz-tabset>
+    <!-- 登录日志标签页 -->
+    <nz-tab nzTitle="登录日志">
+      <nz-spin [nzSpinning]="logsLoading">
+        <nz-table
+          #logsTable
+          [nzData]="loginLogs"
+          [nzFrontPagination]="false"
+          [nzTotal]="logsTotal"
+          [nzPageIndex]="logsPageIndex"
+          [nzPageSize]="logsPageSize"
+          (nzPageIndexChange)="onLogsPageChange($event)"
+          class="mt-4"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>登录时间</th>
+              <th>登录方式</th>
+              <th>登录平台</th>
+              <th>IP地址</th>
+              <th>设备信息</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of logsTable.data">
+              <td>{{ log.log_id }}</td>
+              <td>{{ log.login_time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+              <td class="w-[100px]">{{ log.login_method }}</td>
+              <td class="w-[100px]">{{ log.login_platform }}</td>
+              <td class="max-w-[120px]">{{ log.ip_address }}</td>
+              <td>{{ log.device_info }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        <div *ngIf="loginLogs.length === 0 && !logsLoading" class="flex justify-center py-8">
+          <nz-empty nzDescription="暂无登录日志"></nz-empty>
+        </div>
+      </nz-spin>
+    </nz-tab>
+
+    <!-- 代币记录标签页 -->
+    <nz-tab nzTitle="代币记录">
+      <!-- 筛选区域 -->
+      <div class=" p-4 rounded mb-4 border border-gray-200">
+        <div class="flex flex-wrap gap-4 items-end">
+          <div class="flex flex-col">
+            <nz-select [(ngModel)]="recordFilters.change_type" class="w-32">
+              <nz-option *ngFor="let type of changeTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
+            </nz-select>
+          </div>
+
+          <div class="flex flex-col">
+            <nz-date-picker class="rounded-[4px]"  [(ngModel)]="recordFilters.start_time" nzPlaceHolder="选择开始时间"></nz-date-picker>
+          </div>
+
+          <div class="flex flex-col">
+            <nz-date-picker class="rounded-[4px]" [(ngModel)]="recordFilters.end_time" nzPlaceHolder="选择结束时间"></nz-date-picker>
+          </div>
+
+          <div class="flex gap-2">
+            <button nz-button nzType="primary" (click)="applyRecordFilters()">
+              <nz-icon nzType="search"></nz-icon>
+              查询
+            </button>
+            <button nz-button nzType="default" (click)="resetRecordFilters()">
+              <nz-icon nzType="reload"></nz-icon>
+              重置
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <nz-spin [nzSpinning]="recordsLoading">
+        <nz-table
+          #recordsTable
+          [nzData]="tokenRecords"
+          [nzFrontPagination]="false"
+          [nzTotal]="recordsTotal"
+          [nzPageIndex]="recordsPageIndex"
+          [nzPageSize]="recordsPageSize"
+          (nzPageIndexChange)="onRecordsPageChange($event)"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>变动类型</th>
+              <th>变动金额</th>
+              <th>余额</th>
+              <th>变动时间</th>
+              <th>相关任务</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of recordsTable.data">
+              <td class="w-[80px]">{{ record.record_id }}</td>
+              <td class="w-[100px]">{{ getChangeTypeName(record.change_type) }}</td>
+              <td class="w-[100px]" [ngClass]="getChangeAmountClass(record.change_amount)">
+                {{ formatChangeAmount(record.change_amount) }}
+              </td>
+              <td>{{ record.balance_after }}</td>
+              <td>{{ record.change_time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+              <td>
+                <span *ngIf="record.task_id">{{ record.task_name }} (ID: {{ record.task_id }})</span>
+                <span *ngIf="!record.task_id">-</span>
+              </td>
+              <td>{{ record.remark }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        <div *ngIf="tokenRecords.length === 0 && !recordsLoading" class="flex justify-center py-8">
+          <nz-empty nzDescription="暂无代币记录"></nz-empty>
+        </div>
+      </nz-spin>
+    </nz-tab>
+  </nz-tabset>
+</div>
