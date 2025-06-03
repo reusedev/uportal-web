@@ -14,40 +14,21 @@
   <div class="flex gap-2">
     <div class="flex items-center bg-white rounded-md border border-gray-200 px-3 max-w-xs">
       <nz-icon nzType="search" class="text-gray-400 mr-2"></nz-icon>
-      <input
-        nz-input
-        [(ngModel)]="searchKeyword"
-        placeholder="搜索任务名称或描述"
-        class="border-0 px-0 py-0 text-sm"
-        nzBorderless
-      />
-      <button
-        *ngIf="searchKeyword"
-        nz-button
-        nzType="text"
-        nzSize="small"
-        class="ml-1 flex items-center text-gray-400 hover:text-gray-600"
-        (click)="searchKeyword = ''"
-      >
+      <input nz-input [(ngModel)]="searchKeyword" placeholder="搜索任务名称或描述" class="border-0 px-0 py-0 text-sm"
+        nzBorderless />
+      <button *ngIf="searchKeyword" nz-button nzType="text" nzSize="small"
+        class="ml-1 flex items-center text-gray-400 hover:text-gray-600" (click)="searchKeyword = ''">
         <nz-icon nzType="close-circle" nzTheme="fill"></nz-icon>
       </button>
     </div>
 
     <nz-button-group>
-      <button
-        nz-button
-        [nzType]="viewMode === 'card' ? 'primary' : 'default'"
-        class="view-mode-btn"
-        (click)="viewMode = 'card'"
-      >
+      <button nz-button [nzType]="viewMode === 'card' ? 'primary' : 'default'" class="view-mode-btn"
+        (click)="viewMode = 'card'">
         <nz-icon nzType="appstore" nzTheme="outline"></nz-icon>
       </button>
-      <button
-        nz-button
-        [nzType]="viewMode === 'table' ? 'primary' : 'default'"
-        class="view-mode-btn"
-        (click)="viewMode = 'table'"
-      >
+      <button nz-button [nzType]="viewMode === 'table' ? 'primary' : 'default'" class="view-mode-btn"
+        (click)="viewMode = 'table'">
         <nz-icon nzType="bars" nzTheme="outline"></nz-icon>
       </button>
     </nz-button-group>
@@ -80,7 +61,7 @@
 
           <!-- 卡片内容 -->
           <div class="px-5 py-4 flex-grow">
-            <div  class="text-xs text-gray-500 mb-2">
+            <div class="text-xs text-gray-500 mb-2">
               <span> {{ task.valid_from }}</span>
               <span>~</span>
               <span>{{ (task.valid_to) || '无限' }}</span>
@@ -95,7 +76,15 @@
 
               <div class="flex items-center">
                 <nz-icon nzType="calendar" nzTheme="outline" class="mr-1 text-blue-500"></nz-icon>
-                <span class="text-gray-700">限制: <span class="font-semibold">{{ task.daily_limit }}</span>/天</span>
+                <span class="text-gray-700">限制:
+                  @if (task.daily_limit) {
+                  <span class="font-semibold">{{ task.daily_limit }}</span>
+                  /天
+                  } @else {
+                  <span class="text-gray-500">无限制</span>
+                  }
+
+                </span>
               </div>
 
               <div class="flex items-center">
@@ -147,30 +136,24 @@
 
     <!-- 表格视图模式 -->
     <div *ngIf="viewMode === 'table'" class="overflow-hidden bg-white rounded-lg border border-gray-200 shadow-sm">
-      <nz-table
-        #basicTable
-        [nzData]="filteredTasks"
-        [nzLoading]="loading"
-        [nzShowPagination]="true"
-        [nzPageSize]="10"
-        class="w-full"
-      >
+      <nz-table #basicTable [nzData]="filteredTasks" [nzLoading]="loading" [nzShowPagination]="true" [nzPageSize]="10"
+        class="w-full">
         <thead>
           <tr>
             <th>ID</th>
-            <th >任务名称</th>
+            <th>任务名称</th>
             <th>奖励代币</th>
             <th>每日限制</th>
             <th>间隔(秒)</th>
             <th>是否重复</th>
             <th>状态</th>
-            <th >操作</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let task of basicTable.data">
             <td>{{ task.task_id }}</td>
-            <td >
+            <td>
               <div class="flex items-center">
                 <nz-icon nzType="trophy" nzTheme="twotone" class="mr-2" [nzTwotoneColor]="'#faad14'"></nz-icon>
                 <span>{{ task.task_name }}</span>
@@ -178,9 +161,9 @@
               <div class="text-xs text-gray-500 mt-1">{{ task.task_desc }}</div>
             </td>
             <td class="font-semibold">{{ task.token_reward }}</td>
-            <td >{{ task.daily_limit }}</td>
-            <td >{{ task.interval_seconds }}</td>
-            <td >
+            <td>{{ task.daily_limit }}</td>
+            <td>{{ task.interval_seconds }}</td>
+            <td>
               <nz-tag [nzColor]="task.repeatable === 1 ? 'green' : 'orange'">
                 {{ task.repeatable === 1 ? '可重复' : '不可重复' }}
               </nz-tag>
@@ -196,15 +179,9 @@
                   <nz-icon nzType="edit" nzTheme="outline"></nz-icon>
                   编辑
                 </button>
-                <button
-                  nz-button
-                  nzType="default"
-                  [ngClass]="task.status === 1 ? 'text-red-500' : 'text-green-500'"
-                  nzSize="small"
-                  nz-popconfirm
-                  [nzPopconfirmTitle]="task.status === 1 ? '确定要禁用此任务吗?' : '确定要启用此任务吗?'"
-                  (nzOnConfirm)="toggleTaskStatus(task)"
-                >
+                <button nz-button nzType="default" [ngClass]="task.status === 1 ? 'text-red-500' : 'text-green-500'"
+                  nzSize="small" nz-popconfirm [nzPopconfirmTitle]="task.status === 1 ? '确定要禁用此任务吗?' : '确定要启用此任务吗?'"
+                  (nzOnConfirm)="toggleTaskStatus(task)">
                   <nz-icon [nzType]="task.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline"></nz-icon>
                   {{ task.status === 1 ? '禁用' : '启用' }}
                 </button>
