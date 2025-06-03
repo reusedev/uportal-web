@@ -163,17 +163,17 @@
       <div class=" p-4 rounded mb-4 border border-gray-200">
         <div class="flex flex-wrap gap-4 items-end">
           <div class="flex flex-col">
-            <nz-select [(ngModel)]="recordFilters.change_type" class="w-32">
+            <nz-select nzAllowClear [(ngModel)]="recordFilters.change_type" class="w-32">
               <nz-option *ngFor="let type of changeTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
             </nz-select>
           </div>
 
           <div class="flex flex-col">
-            <nz-date-picker class="rounded-[4px]"  [(ngModel)]="recordFilters.start_time" nzPlaceHolder="选择开始时间"></nz-date-picker>
+            <nz-date-picker nzAllowClear class="rounded-[4px]"  [(ngModel)]="recordFilters.start_time" nzPlaceHolder="选择开始时间"></nz-date-picker>
           </div>
 
           <div class="flex flex-col">
-            <nz-date-picker class="rounded-[4px]" [(ngModel)]="recordFilters.end_time" nzPlaceHolder="选择结束时间"></nz-date-picker>
+            <nz-date-picker nzAllowClear class="rounded-[4px]" [(ngModel)]="recordFilters.end_time" nzPlaceHolder="选择结束时间"></nz-date-picker>
           </div>
 
           <div class="flex gap-2">

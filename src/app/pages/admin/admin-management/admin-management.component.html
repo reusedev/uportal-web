@@ -24,12 +24,12 @@
       <input nz-input placeholder="请输入用户名" [(ngModel)]="filters.username" class="w-48 rounded-[4px]" />
     </div>
     <div class="flex flex-col gap-1">
-      <nz-select class="w-32 rounded-[4px]" nzPlaceHolder="请选择角色" [(ngModel)]="filters.role">
+      <nz-select nzAllowClear class="w-32 rounded-[4px]" nzPlaceHolder="请选择角色" [(ngModel)]="filters.role">
         <nz-option *ngFor="let option of roleOptions" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
       </nz-select>
     </div>
     <div class="flex flex-col gap-1">
-      <nz-select class="w-32 rounded-[4px]" nzPlaceHolder="请选择状态" [(ngModel)]="filters.status">
+      <nz-select nzAllowClear class="w-32 rounded-[4px]" nzPlaceHolder="请选择状态" [(ngModel)]="filters.status">
         <nz-option *ngFor="let option of statusOptions" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
       </nz-select>
     </div>

@@ -18,8 +18,7 @@
   <div class="flex flex-wrap gap-6 items-end">
     <div class="flex flex-col gap-1">
       <!-- <span class="text-xs font-medium text-gray-500">用户状态</span> -->
-      <nz-select  [(ngModel)]="filters.status" nzPlaceHolder="全部状态" class="w-32 rounded-[4px]">
-        <nz-option [nzValue]="null" nzLabel="全部状态"></nz-option>
+      <nz-select nzAllowClear [(ngModel)]="filters.status" nzPlaceHolder="全部状态" class="w-32 rounded-[4px]">
         <nz-option [nzValue]="1" nzLabel="启用"></nz-option>
         <nz-option [nzValue]="0" nzLabel="禁用"></nz-option>
       </nz-select>
