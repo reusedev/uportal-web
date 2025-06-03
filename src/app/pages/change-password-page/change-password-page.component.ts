@@ -8,8 +8,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { PasswordChangeService } from '../../services/password-change/password-change.service';
-import { PublicModule } from '../../public.module'; // Assuming PublicModule has common Angular/Ant Design modules
+import { PublicModule } from '../../public.module';
 import { AuthService, AuthTokenPayload } from '../../services/auth.service';
+import { RoleDict } from '../../configs/dict';
 
 @Component({
   selector: 'app-change-password-page',
@@ -21,6 +22,8 @@ import { AuthService, AuthTokenPayload } from '../../services/auth.service';
 })
 export class ChangePasswordPageComponent implements OnInit {
   passwordChangeService = inject(PasswordChangeService);
+
+  roleDict:any = RoleDict;
 
   auth = inject(AuthService);
 

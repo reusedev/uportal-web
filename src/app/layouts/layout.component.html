@@ -87,7 +87,7 @@
             <span class="text-sm font-medium text-gray-900">{{userInfo?.username || 'Admin'}}</span>
             <span nz-icon nzType="safety-certificate" nzTheme="fill" class="text-blue-400 text-xs"></span>
           </div>
-          <span class="text-xs text-gray-400">{{userInfo?.role || 'Admin'}}</span>
+          <span class="text-xs text-gray-400">{{roleDic[userInfo?.role] || 'Admin'}}</span>
         </div>
         <button *ngIf="!isSidebarCollapsed" nz-button nzType="text" class="rounded-lg p-2 hover:bg-gray-100">
           <span nz-icon nzType="right" nzTheme="outline" class="text-lg text-gray-500"></span>

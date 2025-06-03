@@ -11,10 +11,10 @@
           placeholder="请输入配置键名，例如：TOKEN_EXCHANGE_RATE"
           [disabled]="!!config"
         />
-        <div class="mt-1 text-xs text-gray-500">配置键名应由大写字母、数字和下划线组成，以字母开头</div>
+        <div class="mt-1 text-xs text-gray-500">配置键名应由小写字母、数字和下划线组成，以字母开头</div>
         <ng-template #configKeyErrorTpl let-control>
           <ng-container *ngIf="control.hasError('required')">请输入配置键名</ng-container>
-          <ng-container *ngIf="control.hasError('pattern')">配置键名格式不正确，应由大写字母、数字和下划线组成，以字母开头</ng-container>
+          <ng-container *ngIf="control.hasError('pattern')">配置键名格式不正确，应由小写字母、数字和下划线组成，以字母开头</ng-container>
         </ng-template>
       </nz-form-control>
     </nz-form-item>
@@ -44,7 +44,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <div class="flex justify-end space-x-4 mt-6">
+    <!-- <div class="flex justify-end space-x-4 mt-6">
       <button type="button" nz-button (click)="cancel()">取消</button>
       <button
         nz-button
@@ -54,7 +54,7 @@
       >
         保存
       </button>
-    </div>
+    </div> -->
   </form>
   </nz-spin>
 </div>

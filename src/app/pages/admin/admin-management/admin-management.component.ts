@@ -15,6 +15,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { Router, RouterModule } from '@angular/router';
 import { AdminFormComponent } from './admin-form/admin-form.component';
 import { AuthService, AuthTokenPayload } from '../../../services/auth.service';
+import { RoleDict } from '../../../configs/dict';
 
 // 管理员接口定义
 interface Admin {
@@ -50,7 +51,9 @@ export class AdminManagementComponent implements OnInit {
   private modalService = inject(NzModalService);
   private router = inject(Router);
   auth = inject(AuthService);
-    userInfo: any = {};
+  userInfo: any = {};
+
+  roleDict:any = RoleDict;
 
   // 管理员列表数据
   adminList: Admin[] = [];
@@ -65,23 +68,21 @@ export class AdminManagementComponent implements OnInit {
 
   // 筛选参数
   filters = {
-    username: '',
-    role: '',
-    status: '',
+    username: null,
+    role: null,
+    status: null,
   };
 
   // 角色选项
   roleOptions = [
-    { value: '', label: '全部角色' },
     { value: 'admin', label: '管理员' },
     { value: 'super_admin', label: '超级管理员' },
   ];
 
   // 状态选项
   statusOptions = [
-    { value: '', label: '全部状态' },
-    { value: '1', label: '启用' },
-    { value: '0', label: '禁用' },
+    { value: 1, label: '启用' },
+    { value: 0, label: '禁用' },
   ];
 
   // 排序参数
@@ -106,9 +107,9 @@ export class AdminManagementComponent implements OnInit {
     const params: any = {
       page: this.pageIndex,
       limit: this.pageSize,
-      username: this.filters.username || '',
-      role: this.filters.role || '',
-      status: this.filters.status === '' ? '' : parseInt(this.filters.status),
+      username: this.filters.username || null,
+      role: this.filters.role || null,
+      status: this.filters.status === null ? null : this.filters.status,
     };
 
     // 添加排序参数
@@ -128,7 +129,12 @@ export class AdminManagementComponent implements OnInit {
           if (res.code === 0) {
             this.adminList = res.data;
             this.total = res.count;
-            console.log('Total count from server:', res.count, 'Current total:', this.total);
+            console.log(
+              'Total count from server:',
+              res.count,
+              'Current total:',
+              this.total
+            );
           } else {
             this.message.error('获取管理员列表失败');
           }
@@ -155,9 +161,9 @@ export class AdminManagementComponent implements OnInit {
   // 重置筛选
   resetFilters(): void {
     this.filters = {
-      username: '',
-      role: '',
-      status: '',
+      username: null,
+      role: null,
+      status: null,
     };
     this.pageIndex = 1;
     this.loadAdminList();

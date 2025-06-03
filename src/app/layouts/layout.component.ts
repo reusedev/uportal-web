@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { PublicModule } from '../public.module';
 import { AuthService, AuthTokenPayload } from '../services/auth.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { RoleDict } from '../configs/dict';
 
 @Component({
   standalone: true,
@@ -20,6 +21,8 @@ export class LayoutComponent implements OnInit {
   private router = inject(Router);
   /** 控制侧边栏的展开/收起状态 */
   protected isSidebarCollapsed = false;
+
+  roleDic:any = RoleDict;
 
   sidebarHover = false;
 

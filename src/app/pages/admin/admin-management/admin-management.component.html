@@ -8,7 +8,7 @@
         {{userInfo?.username || 'Admin'}}
         <span nz-icon nzType="safety-certificate" nzTheme="fill" class="text-blue-400 text-xs"></span>
       </div>
-      <div class="text-xs text-[#6B7280]">{{userInfo?.role || 'Admin'}}</div>
+      <div class="text-xs text-[#6B7280]">{{roleDict[userInfo?.role] || 'Admin'}}</div>
     </div>
   </div>
 
@@ -108,9 +108,6 @@
             </button>
           </div>
         </td>
-      </tr>
-      <tr *ngIf="adminTable.data.length === 0">
-        <td colspan="7" class="text-center py-8 text-gray-500">暂无数据</td>
       </tr>
     </tbody>
   </nz-table>
