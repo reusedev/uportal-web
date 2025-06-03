@@ -1,0 +1,44 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: dev-deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'pnpm'
+
+    - name: Install
+      run: pnpm install
+
+    - name: Build
+      run: pnpm build
+
+    - name: Deploy
+      uses: easingthemes/ssh-deploy@main
+      with:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_FED }}
+        REMOTE_HOST: 172.17.129.116
+        REMOTE_USER: blossom
+        SOURCE: dist/uportal-web/browser/
+        TARGET: /data/blossom/${{ github.repository }}/
+        SCRIPT_BEFORE: |
+          mkdir -p /data/blossom/${{ github.repository }}
