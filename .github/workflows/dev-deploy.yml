@@ -26,6 +26,9 @@ jobs:
         node-version: 20
         cache: 'pnpm'
 
+    - name: Cache pnpm store
+      run: echo 'registry=https://registry.npmmirror.com' > .npmrc
+
     - name: Install
       run: pnpm install
 
