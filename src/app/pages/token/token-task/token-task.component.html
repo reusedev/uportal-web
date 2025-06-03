@@ -63,13 +63,13 @@
 <div class="py-6">
   <nz-spin [nzSpinning]="loading">
     <!-- 卡片视图模式 -->
-    <div *ngIf="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div *ngIf="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
 
       <!-- 任务卡片 -->
       @for (task of filteredTasks; track $index) {
       <nz-ribbon [nzText]="task.status === 1 ? '启用' : '禁用'" [nzColor]="task.status === 1 ? 'green' :'red'">
         <div
-          class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col">
+          class=" bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col">
           <!-- 卡片头部 -->
           <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
             <div class="flex items-center">

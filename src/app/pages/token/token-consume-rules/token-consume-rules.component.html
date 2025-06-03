@@ -63,7 +63,7 @@
 <div class="py-6">
   <nz-spin [nzSpinning]="loading">
     <!-- 卡片视图模式 -->
-    <div *ngIf="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div *ngIf="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
       <!-- 规则卡片 -->
       @for (feature of filteredFeatures; track feature.feature_id) {
       <nz-ribbon [nzText]="feature.status === 1 ? '启用' : '禁用'" [nzColor]="feature.status === 1 ? 'green' :'red'">
