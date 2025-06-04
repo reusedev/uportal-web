@@ -9,12 +9,14 @@ import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { PublicModule } from '../../public.module'; // Assuming this includes NzInput, NzButton, NzForm etc.
 import { PasswordChangeService } from '../../services/password-change/password-change.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-enter-old-password',
@@ -30,16 +32,29 @@ export class EnterOldPasswordComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   oldPasswordForm!: FormGroup;
+  auth = inject(AuthService);
+  password!:string;
 
   ngOnInit(): void {
+    const payload: any = this.auth.decode(this.auth.get());
+    this.password = payload?.password || '';
+
     this.oldPasswordForm = this.fb.group({
       oldPassword: [
         this.route.snapshot.queryParams['old'] || null,
-        [Validators.required],
+        // 必须与this.password一致
+        [Validators.required, this.validPassword()],
       ],
     });
 
     this.passwordChangeService.setStep(1); // 设置当前步骤为 1
+  }
+
+  validPassword():ValidatorFn{
+    return (control: any) => {
+      const oldPassword = control.value;
+      return oldPassword === this.password ? null : { passwordMismatch: true };
+    };
 
   }
 
