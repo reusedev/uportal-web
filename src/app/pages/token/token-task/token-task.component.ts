@@ -54,6 +54,7 @@ export class TokenTaskComponent implements OnInit {
     const params = {
       ...task,
       status: task.status === 1 ? 0 : 1, // 切换状态
+      id: task.task_id,
     }
      this.http.post('/admin/reward-tasks/edit', params).subscribe({
           next: () => {
