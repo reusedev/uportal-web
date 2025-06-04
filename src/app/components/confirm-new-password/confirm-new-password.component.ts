@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { PublicModule } from '../../public.module'; // Assuming this includes NzInput, NzButton, NzForm etc.
+import { PublicModule } from '../../public.module';
 import { PasswordChangeService } from '../../services/password-change/password-change.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PublicModule],
   templateUrl: './confirm-new-password.component.html',
-  styleUrls: ['./confirm-new-password.component.css'], // This will be an empty file
+  styleUrls: ['./confirm-new-password.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmNewPasswordComponent implements OnInit {
@@ -20,7 +20,7 @@ export class ConfirmNewPasswordComponent implements OnInit {
 
   confirmPasswordForm!: FormGroup;
   passwordVisible = false;
-  isLoading = this.passwordChangeService.isLoading; // Bind to the service's loading state
+  isLoading = this.passwordChangeService.isLoading;
 
   ngOnInit(): void {
     this.confirmPasswordForm = this.fb.group({
@@ -29,7 +29,6 @@ export class ConfirmNewPasswordComponent implements OnInit {
      this.passwordChangeService.setStep(3); // 设置当前步骤为 3
   }
 
-  // Custom validator to check if confirm password matches the new password
   passwordMatchValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const confirmPassword = control.value;
@@ -49,11 +48,9 @@ export class ConfirmNewPasswordComponent implements OnInit {
       return;
     }
 
-    // If valid, trigger the password change in the service
     this.passwordChangeService.submitChange();
   }
 
-  // Go back to the previous step
   goBack(): void {
     this.passwordChangeService.goBack();
   }

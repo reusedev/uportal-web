@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { PublicModule } from '../../public.module'; // Assuming this includes NzInput, NzButton, NzForm etc.
+import { PublicModule } from '../../public.module';
 import { PasswordChangeService } from '../../services/password-change/password-change.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PublicModule],
   templateUrl: './enter-new-password.component.html',
-  styleUrls: ['./enter-new-password.component.css'], // This will be an empty file
+  styleUrls: ['./enter-new-password.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EnterNewPasswordComponent implements OnInit {
@@ -30,7 +30,6 @@ export class EnterNewPasswordComponent implements OnInit {
      this.passwordChangeService.setStep(2); // 设置当前步骤为 2
   }
 
-  // Custom validator to check if new password is the same as old password
   oldPasswordMismatchValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const newPassword = control.value;
@@ -54,7 +53,6 @@ export class EnterNewPasswordComponent implements OnInit {
     this.passwordChangeService.setNewPassword(newPassword);
   }
 
-  // Go back to the previous step
   goBack(): void {
     this.passwordChangeService.goBack();
   }

@@ -45,7 +45,6 @@ export class LoginComponent {
 
   loading = false;
 
-  // 定义 FormGroup
   loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],

@@ -17,7 +17,7 @@ import { RoleDict } from '../../configs/dict';
   standalone: true,
   imports: [CommonModule, RouterOutlet, PublicModule],
   templateUrl: './change-password-page.component.html',
-  styleUrls: ['./change-password-page.component.css'], // This will be an empty file
+  styleUrls: ['./change-password-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangePasswordPageComponent implements OnInit {

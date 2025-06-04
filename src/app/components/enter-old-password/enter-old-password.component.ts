@@ -12,7 +12,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { PublicModule } from '../../public.module'; // Assuming this includes NzInput, NzButton, NzForm etc.
+import { PublicModule } from '../../public.module';
 import { PasswordChangeService } from '../../services/password-change/password-change.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PublicModule],
   templateUrl: './enter-old-password.component.html',
-  styleUrls: ['./enter-old-password.component.css'], // This will be an empty file
+  styleUrls: ['./enter-old-password.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EnterOldPasswordComponent implements OnInit {
@@ -42,7 +42,6 @@ export class EnterOldPasswordComponent implements OnInit {
     this.oldPasswordForm = this.fb.group({
       oldPassword: [
         this.route.snapshot.queryParams['old'] || null,
-        // 必须与this.password一致
         [Validators.required, this.validPassword()],
       ],
     });
