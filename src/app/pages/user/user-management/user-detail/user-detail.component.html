@@ -150,10 +150,6 @@
             </tr>
           </tbody>
         </nz-table>
-
-        <div *ngIf="loginLogs.length === 0 && !logsLoading" class="flex justify-center py-8">
-          <nz-empty nzDescription="暂无登录日志"></nz-empty>
-        </div>
       </nz-spin>
     </nz-tab>
 
@@ -227,10 +223,6 @@
             </tr>
           </tbody>
         </nz-table>
-
-        <div *ngIf="tokenRecords.length === 0 && !recordsLoading" class="flex justify-center py-8">
-          <nz-empty nzDescription="暂无代币记录"></nz-empty>
-        </div>
       </nz-spin>
     </nz-tab>
   </nz-tabset>

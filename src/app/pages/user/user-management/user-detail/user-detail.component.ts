@@ -14,9 +14,17 @@ import { Component as NgComponent, Input } from '@angular/core';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, PublicModule, NzTabsModule, RouterModule, NzBreadCrumbModule, NzInputModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PublicModule,
+    NzTabsModule,
+    RouterModule,
+    NzBreadCrumbModule,
+    NzInputModule,
+  ],
   templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.css']
+  styleUrls: ['./user-detail.component.css'],
 })
 export class UserDetailComponent implements OnInit {
   private http = inject(HttpClient);
@@ -25,7 +33,7 @@ export class UserDetailComponent implements OnInit {
   private router = inject(Router);
   private modalService = inject(NzModalService);
 
-  userId!: number;
+  userId: string = this.route.snapshot.queryParams['id'] || '';
 
   // 用户详情
   userDetail: User | null = null;
@@ -53,7 +61,7 @@ export class UserDetailComponent implements OnInit {
   recordFilters = {
     change_type: '',
     start_time: '',
-    end_time: ''
+    end_time: '',
   };
 
   // 代币变动类型选项
@@ -61,23 +69,13 @@ export class UserDetailComponent implements OnInit {
     { value: '', label: '全部类型' },
     { value: 'TASK_REWARD', label: '任务奖励' },
     { value: 'ADMIN_ADJUST', label: '管理员调整' },
-    { value: 'FEATURE_CONSUME', label: '特性消费' }
+    { value: 'FEATURE_CONSUME', label: '特性消费' },
   ];
 
   ngOnInit(): void {
-    // 从路由参数中获取用户ID
-    this.route.paramMap.subscribe(params => {
-      const idParam = params.get('id');
-      if (idParam) {
-        this.userId = +idParam;
-        this.loadUserDetail();
-        this.loadLoginLogs();
-        this.loadTokenRecords();
-      } else {
-        this.message.error('无效的用户ID');
-        this.goBack();
-      }
-    });
+    this.loadUserDetail();
+    this.loadLoginLogs();
+    this.loadTokenRecords();
   }
 
   // 返回用户列表
@@ -88,44 +86,51 @@ export class UserDetailComponent implements OnInit {
   // 加载用户详情
   loadUserDetail(): void {
     this.userLoading = true;
-    this.http.get<{ code: number; data: User }>(`/admin/users/${this.userId}`).subscribe({
-      next: (res) => {
-        this.userLoading = false;
-        if (res.code === 0) {
-          this.userDetail = res.data;
-        } else {
+    this.http
+      .get<{ code: number; data: User }>(`/admin/users/${this.userId}`)
+      .subscribe({
+        next: (res) => {
+          this.userLoading = false;
+          if (res.code === 0) {
+            this.userDetail = res.data;
+          } else {
+            this.message.error('获取用户详情失败');
+          }
+        },
+        error: () => {
+          this.userLoading = false;
           this.message.error('获取用户详情失败');
-        }
-      },
-      error: () => {
-        this.userLoading = false;
-        this.message.error('获取用户详情失败');
-      }
-    });
+        },
+      });
   }
 
   // 加载登录日志
   loadLoginLogs(): void {
     this.logsLoading = true;
-    this.http.post<{ code: number; data: LoginLog[]; count: number }>('/admin/users/login-logs', {
-      page: this.logsPageIndex,
-      limit: this.logsPageSize,
-      user_id: this.userId.toString()
-    }).subscribe({
-      next: (res) => {
-        this.logsLoading = false;
-        if (res.code === 0) {
-          this.loginLogs = res.data;
-          this.logsTotal = res.count;
-        } else {
-          this.message.error('获取登录日志失败');
+    this.http
+      .post<{ code: number; data: LoginLog[]; count: number }>(
+        '/admin/users/login-logs',
+        {
+          page: this.logsPageIndex,
+          limit: this.logsPageSize,
+          user_id: this.userId.toString(),
         }
-      },
-      error: () => {
-        this.logsLoading = false;
-        this.message.error('获取登录日志失败');
-      }
-    });
+      )
+      .subscribe({
+        next: (res) => {
+          this.logsLoading = false;
+          if (res.code === 0) {
+            this.loginLogs = res.data;
+            this.logsTotal = res.count;
+          } else {
+            this.message.error('获取登录日志失败');
+          }
+        },
+        error: () => {
+          this.logsLoading = false;
+          this.message.error('获取登录日志失败');
+        },
+      });
   }
 
   // 加载代币记录
@@ -135,7 +140,7 @@ export class UserDetailComponent implements OnInit {
     const params = {
       page: this.recordsPageIndex,
       limit: this.recordsPageSize,
-      user_id: this.userId.toString()
+      user_id: this.userId.toString(),
     };
 
     // 添加筛选条件
@@ -149,21 +154,26 @@ export class UserDetailComponent implements OnInit {
       Object.assign(params, { end_time: this.recordFilters.end_time });
     }
 
-    this.http.post<{ code: number; data: TokenRecord[]; count: number }>('/admin/users/token-records', params).subscribe({
-      next: (res) => {
-        this.recordsLoading = false;
-        if (res.code === 0) {
-          this.tokenRecords = res.data;
-          this.recordsTotal = res.count;
-        } else {
+    this.http
+      .post<{ code: number; data: TokenRecord[]; count: number }>(
+        '/admin/users/token-records',
+        params
+      )
+      .subscribe({
+        next: (res) => {
+          this.recordsLoading = false;
+          if (res.code === 0) {
+            this.tokenRecords = res.data;
+            this.recordsTotal = res.count;
+          } else {
+            this.message.error('获取代币记录失败');
+          }
+        },
+        error: () => {
+          this.recordsLoading = false;
           this.message.error('获取代币记录失败');
-        }
-      },
-      error: () => {
-        this.recordsLoading = false;
-        this.message.error('获取代币记录失败');
-      }
-    });
+        },
+      });
   }
 
   // 切换用户状态
@@ -171,7 +181,7 @@ export class UserDetailComponent implements OnInit {
     if (!this.userDetail) return;
 
     const params = {
-      user_id: this.userDetail.user_id.toString(),
+      user_id: this.userDetail.id,
       status: this.userDetail.status === 1 ? 0 : 1, // 切换状态
     };
 
@@ -207,36 +217,43 @@ export class UserDetailComponent implements OnInit {
           return false;
         }
         return new Promise<boolean>((resolve) => {
-          this.http.post<{code: number; data: {token_balance: number}}>('/admin/users/tokens/adjust', {
-            user_id: this.userId.toString(),
-            change_amount: changeAmount,
-            remark: remark || '管理员手动调整'
-          }).subscribe({
-            next: (res) => {
-              if (res.code === 0) {
-                if (this.userDetail) {
-                  this.userDetail.token_balance = res.data.token_balance;
+          this.http
+            .post<{ code: number; data: { token_balance: number } }>(
+              '/admin/users/tokens/adjust',
+              {
+                user_id: this.userId.toString(),
+                change_amount: changeAmount,
+                remark: remark || '管理员手动调整',
+              }
+            )
+            .subscribe({
+              next: (res) => {
+                if (res.code === 0) {
+                  if (this.userDetail) {
+                    this.userDetail.token_balance = res.data.token_balance;
+                  }
+                  this.message.success('代币调整成功');
+                  this.selectTokenRecordsTab();
+                  this.recordsPageIndex = 1;
+                  this.loadTokenRecords();
+                  resolve(true);
+                } else {
+                  this.message.error('代币调整失败');
+                  resolve(false);
                 }
-                this.message.success('代币调整成功');
-                this.selectTokenRecordsTab();
-                this.recordsPageIndex = 1;
-                this.loadTokenRecords();
-                resolve(true);
-              } else {
+              },
+              error: () => {
                 this.message.error('代币调整失败');
                 resolve(false);
-              }
-            },
-            error: () => {
-              this.message.error('代币调整失败');
-              resolve(false);
-            }
-          });
+              },
+            });
         });
-      }
+      },
     });
     // 设置 currentBalance
-    (modalRef.getContentComponent() as TokenAdjustmentComponent).currentBalance = currentBalance;
+    (
+      modalRef.getContentComponent() as TokenAdjustmentComponent
+    ).currentBalance = currentBalance;
   }
 
   // 选择代币记录标签
@@ -275,7 +292,7 @@ export class UserDetailComponent implements OnInit {
     this.recordFilters = {
       change_type: '',
       start_time: '',
-      end_time: ''
+      end_time: '',
     };
     this.recordsPageIndex = 1;
     this.loadTokenRecords();
@@ -283,7 +300,7 @@ export class UserDetailComponent implements OnInit {
 
   // 获取代币变动类型的显示名称
   getChangeTypeName(type: string): string {
-    const found = this.changeTypes.find(t => t.value === type);
+    const found = this.changeTypes.find((t) => t.value === type);
     return found ? found.label : type;
   }
 
@@ -303,7 +320,8 @@ export class UserDetailComponent implements OnInit {
   selector: 'app-token-adjustment',
   standalone: true,
   imports: [CommonModule, FormsModule, PublicModule, NzInputModule],
-  styles: [`
+  styles: [
+    `
     .token-balance { color: #1890ff; font-weight: 500; }
     .token-input { margin-bottom: 16px; }
     .input-hint { font-size: 12px; color: #888; margin-top: 4px; }
@@ -311,7 +329,8 @@ export class UserDetailComponent implements OnInit {
     .preview-balance { font-weight: 500; }
     .positive { color: #52c41a; }
     .negative { color: #f5222d; }
-  `],
+  `,
+  ],
   template: `
     <div class="mb-4">
       <label class="block text-sm font-medium mb-2">当前余额</label>
@@ -337,7 +356,7 @@ export class UserDetailComponent implements OnInit {
       <label class="block text-sm font-medium mb-1">备注</label>
       <textarea nz-input [(ngModel)]="remark" rows="3" placeholder="请输入调整原因"></textarea>
     </div>
-  `
+  `,
 })
 export class TokenAdjustmentComponent {
   @Input() currentBalance = 0;

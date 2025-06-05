@@ -32,7 +32,7 @@ export class UserManagementComponent {
   pageIndex = 1;
   pageSize = 10;
   total = 0;
-  sort:any = null
+  sort: any = null;
 
   // 筛选条件
   filters = {
@@ -48,7 +48,7 @@ export class UserManagementComponent {
     const params = {
       page: this.pageIndex,
       limit: this.pageSize,
-      sort:this.sort
+      sort: this.sort,
     };
 
     // 添加筛选条件
@@ -83,7 +83,7 @@ export class UserManagementComponent {
   // 切换用户状态
   toggleUserStatus(user: User): void {
     const params = {
-      user_id: user.user_id.toString(),
+      user_id: user.id.toString(),
       status: user.status === 1 ? 0 : 1, // 切换状态
     };
 
@@ -100,79 +100,11 @@ export class UserManagementComponent {
 
   // 查看用户详情
   viewUserDetail(user: User) {
-    // 使用路由导航到用户详情页
-    this.router.navigate(['/user/management', user.user_id]);
-  }
-
-  // 调整用户代币
-  adjustTokens(user: User): void {
-    // 使用 NZ 的模态框询问调整数量和备注
-    import('ng-zorro-antd/modal').then(({ NzModalService }) => {
-      // 注入Modal服务
-      const modalService = inject(NzModalService);
-
-      let changeAmount: number | null = null;
-      let remark = '';
-
-      modalService.create({
-        nzTitle: '调整用户代币',
-        nzContent: `
-          <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">当前余额: ${user.token_balance}</label>
-            <div class="flex items-center">
-              <input #changeAmountInput type="number" class="w-full px-3 py-2 border rounded" placeholder="输入调整数量（正数增加，负数减少）" />
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">备注</label>
-            <textarea #remarkInput class="w-full px-3 py-2 border rounded" rows="3" placeholder="请输入调整原因"></textarea>
-          </div>
-        `,
-        nzOnOk: () => {
-          const changeAmountInput = document.querySelector(
-            'input'
-          ) as HTMLInputElement;
-          const remarkInput = document.querySelector(
-            'textarea'
-          ) as HTMLTextAreaElement;
-
-          changeAmount = Number(changeAmountInput.value);
-          remark = remarkInput.value;
-
-          if (isNaN(changeAmount) || changeAmount === 0) {
-            this.message.error('请输入有效的调整数量');
-            return false;
-          }
-
-          // 提交代币调整请求
-          this.http
-            .post<{ code: number; data: { token_balance: number } }>(
-              '/admin/users/tokens/adjust',
-              {
-                user_id: user.user_id.toString(),
-                change_amount: changeAmount,
-                remark: remark || '管理员手动调整',
-              }
-            )
-            .subscribe({
-              next: (res) => {
-                if (res.code === 0) {
-                  user.token_balance = res.data.token_balance; // 更新本地代币余额
-                  this.message.success('代币调整成功');
-                } else {
-                  this.message.error('代币调整失败');
-                }
-              },
-              error: () => {
-                this.message.error('代币调整失败');
-              },
-            });
-
-          return true;
-        },
-        nzOkText: '确认',
-        nzCancelText: '取消',
-      });
+    console.log('查看用户详情:', user);
+    this.router.navigate(['/user/management/detail'], {
+      queryParams: {
+        id: user.id,
+      },
     });
   }
 
@@ -220,15 +152,18 @@ export class UserManagementComponent {
     );
   }
 
-  onQueryParamsChange(params:NzTableQueryParams): void {
+  onQueryParamsChange(params: NzTableQueryParams): void {
     const sortItems = params.sort.filter((item) => item.value);
-    if(sortItems.length){
-      const sort = [sortItems[0].key, sortItems[0].value === 'ascend' ? 'asc' : 'desc'];
+    if (sortItems.length) {
+      const sort = [
+        sortItems[0].key,
+        sortItems[0].value === 'ascend' ? 'asc' : 'desc',
+      ];
       this.sort = sort;
     } else {
       this.sort = null;
     }
 
-    this.loadUserList()
+    this.loadUserList();
   }
 }

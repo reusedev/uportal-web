@@ -87,7 +87,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let user of basicTable.data">
-            <td>{{ user.user_id }}</td>
+            <td>{{ user.id }}</td>
             <td class="w-[200px]">
               <div class="flex items-center">
                 <nz-avatar [nzSize]="32" [nzSrc]="user.avatar_url || '/assets/avatar.png'" class="mr-3"></nz-avatar>

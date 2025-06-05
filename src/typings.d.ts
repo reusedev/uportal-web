@@ -24,7 +24,7 @@ interface TokenFeature {
 
 // 用户数据接口
 interface User {
-  user_id: number;
+  id: string;
   phone: string;
   email: string;
   nickname: string;

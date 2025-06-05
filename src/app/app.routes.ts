@@ -28,7 +28,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/user/user-management/user-management.component').then(m => m.UserManagementComponent)
       },
       {
-        path: 'user/management/:id',
+        path: 'user/management/detail',
         loadComponent: () => import('./pages/user/user-management/user-detail/user-detail.component').then(m => m.UserDetailComponent)
       },
       {
