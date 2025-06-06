@@ -35,7 +35,7 @@ export class ConfigAddComponent implements OnInit {
 
   // 配置表单
   configForm: FormGroup = this.fb.group({
-    config_key: ['', [Validators.required, Validators.pattern(/^[a-z][a-z0-9_]*$/)]],
+    config_key: ['', [Validators.required, Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]],
     config_value: ['', [Validators.required]],
     description: ['', [Validators.required]]
   });

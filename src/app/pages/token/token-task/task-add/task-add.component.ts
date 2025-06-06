@@ -59,7 +59,11 @@ export class TaskAddComponent implements OnInit {
         ],
         repeatable: [this.task.repeatable, [Validators.required]],
         status: [this.task.status], // 默认为禁用状态
+        task_key: [this.task.task_key, [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]],
       });
+
+      // 如果是编辑模式，禁用task_key字段
+      this.validateForm.get('task_key')?.disable();
     } else {
       this.validateForm = this.fb.group({
         task_name: [null, [Validators.required]],
@@ -71,6 +75,7 @@ export class TaskAddComponent implements OnInit {
         valid_to: [null],
         repeatable: [1, [Validators.required]],
         status: [0], // 默认为禁用状态
+        task_key: [null, [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]],
       });
     }
   }

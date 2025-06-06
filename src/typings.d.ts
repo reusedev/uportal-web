@@ -10,6 +10,7 @@ interface TokenTask {
   status: number; // 0: 禁用, 1: 启用
   valid_from:string;
   valid_to:string;
+  task_key: string;
 }
 
 // 代币消费特性数据接口

@@ -8,10 +8,10 @@
           nz-input
           id="config_key"
           formControlName="config_key"
-          placeholder="请输入配置键名，例如：TOKEN_EXCHANGE_RATE"
+          placeholder="请输入配置键名"
           [disabled]="!!config"
         />
-        <div class="mt-1 text-xs text-gray-500">配置键名应由小写字母、数字和下划线组成，以字母开头</div>
+        <div class="mt-1 text-xs text-gray-500">配置键名应由字母、数字和下划线组成，以字母开头</div>
         <ng-template #configKeyErrorTpl let-control>
           <ng-container *ngIf="control.hasError('required')">请输入配置键名</ng-container>
           <ng-container *ngIf="control.hasError('pattern')">配置键名格式不正确，应由小写字母、数字和下划线组成，以字母开头</ng-container>

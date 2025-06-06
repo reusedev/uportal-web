@@ -37,10 +37,12 @@ export class TokenFeatureAddComponent implements OnInit {
         ],
         feature_code: [
           this.feature.feature_code,
-          [Validators.required, Validators.pattern(/^[A-Z][A-Z0-9_]*$/)]
+          [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]
         ],
         status: [this.feature.status], // 保持原状态
       });
+      // 如果是编辑模式，禁用feature_code字段
+      this.validateForm.get('feature_code')?.disable();
     } else {
       this.validateForm = this.fb.group({
         feature_name: [null, [Validators.required]],
@@ -48,7 +50,7 @@ export class TokenFeatureAddComponent implements OnInit {
         token_cost: [null, [Validators.required, Validators.min(1)]],
         feature_code: [
           null,
-          [Validators.required, Validators.pattern(/^[A-Z][A-Z0-9_]*$/)]
+         [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]
         ],
         status: [1], // 默认为启用状态
       });

@@ -3,6 +3,18 @@
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical">
       <nz-form-item>
+        <nz-form-label nzRequired>特性代码</nz-form-label>
+        <nz-form-control [nzErrorTip]="configKeyErrorTpl">
+          <input nz-input formControlName="feature_code" placeholder="请输入特性代码" />
+          <div class="mt-1 text-xs text-gray-500">特性代码应由字母、数字和下划线组成，以字母开头</div>
+          <ng-template #configKeyErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">请输入特性代码</ng-container>
+            <ng-container *ngIf="control.hasError('pattern')">特性代码格式不正确，应由小写字母、数字和下划线组成，以字母开头</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
         <nz-form-label nzRequired>特性名称</nz-form-label>
         <nz-form-control nzErrorTip="请输入特性名称">
           <input nz-input formControlName="feature_name" placeholder="请输入特性名称" />
@@ -22,14 +34,6 @@
         <nz-form-control nzErrorTip="请输入代币消费数量">
           <nz-input-number formControlName="token_cost" [nzMin]="1" [nzStep]="1" [nzPlaceHolder]="'请输入代币消费数量'"
             class="w-full"></nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label nzRequired>特性代码</nz-form-label>
-        <nz-form-control nzErrorTip="请输入特性代码">
-          <input nz-input formControlName="feature_code" placeholder="请输入特性代码(如: PREMIUM_FILTER)" />
-          <div class="text-gray-400 mt-1 text-xs">大写英文和下划线组成，例如：PREMIUM_FILTER</div>
         </nz-form-control>
       </nz-form-item>
 
