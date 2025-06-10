@@ -338,19 +338,7 @@ export class UserDetailComponent implements OnInit {
     </div>
     <div class="token-input">
       <label class="block text-sm font-medium mb-1">调整数量</label>
-      <input nz-input [(ngModel)]="changeAmount" type="number" placeholder="正数增加，负数减少" />
-      <div class="input-hint">请输入调整数量，正数表示增加，负数表示减少</div>
-    </div>
-    <div *ngIf="changeAmount && isNumber(changeAmount) && changeAmount !== 0" class="preview-section">
-      <div>调整预览：</div>
-      <div>
-        {{ currentBalance }}
-        <span [ngClass]="changeAmount > 0 ? 'positive' : 'negative'">
-          {{ changeAmount > 0 ? '+' + changeAmount : changeAmount }}
-        </span>
-        =
-        <span class="preview-balance">{{ currentBalance + changeAmount }}</span>
-      </div>
+      <input nz-input [(ngModel)]="changeAmount" type="number" placeholder="请输入代币数量" />
     </div>
     <div class="mt-4">
       <label class="block text-sm font-medium mb-1">备注</label>
