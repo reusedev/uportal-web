@@ -90,7 +90,7 @@
             <td>{{ user.id }}</td>
             <td class="w-[200px]">
               <div class="flex items-center">
-                <nz-avatar [nzSize]="32" [nzSrc]="user.avatar_url || '/assets/avatar.png'" class="mr-3"></nz-avatar>
+                <nz-avatar [nzSize]="32" [nzSrc]="user.avatar || '/assets/avatar.png'" class="mr-3"></nz-avatar>
                 <div>
                   <div class="font-medium">{{ user.nickname }}</div>
                   <!-- <div class="text-xs text-gray-500">

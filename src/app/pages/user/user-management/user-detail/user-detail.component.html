@@ -29,7 +29,7 @@
     <div class="bg-white p-6 rounded-lg border border-gray-200 mb-6">
       <div class="flex justify-between items-start mb-6">
         <div class="flex items-center">
-          <nz-avatar [nzSize]="64" [nzSrc]="userDetail?.avatar_url || '/assets/avatar.png'" class="mr-4"></nz-avatar>
+          <nz-avatar [nzSize]="64" [nzSrc]="userDetail?.avatar || '/assets/avatar.png'" class="mr-4"></nz-avatar>
           <div>
             <div class="flex items-center mb-1">
               <h2 class="text-xl font-semibold text-gray-800 m-0">{{ userDetail?.nickname || '加载中...' }}</h2>

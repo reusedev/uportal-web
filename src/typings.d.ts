@@ -29,7 +29,7 @@ interface User {
   phone: string;
   email: string;
   nickname: string;
-  avatar_url: string;
+  avatar: string;
   status: number; // 0: 禁用, 1: 启用
   token_balance: number;
   created_at: string;

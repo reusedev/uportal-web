@@ -230,7 +230,7 @@ export class UserDetailComponent implements OnInit {
               next: (res) => {
                 if (res.code === 0) {
                   if (this.userDetail) {
-                    this.userDetail.token_balance = res.data.token_balance;
+                    this.userDetail.token_balance = res.data?.token_balance;
                   }
                   this.message.success('代币调整成功');
                   this.selectTokenRecordsTab();
