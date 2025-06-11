@@ -197,24 +197,19 @@
         >
           <thead>
             <tr>
-              <th>ID</th>
-              <!-- <th>变动类型</th> -->
               <th>余额</th>
+              <th>变动金额</th>
               <th>变动时间</th>
-              <th>相关任务</th>
               <th>备注</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let record of recordsTable.data">
-              <td class="w-[80px]">{{ record.record_id }}</td>
-              <!-- <td class="w-[100px]">{{ getChangeTypeName(record.change_type) }}</td> -->
               <td>{{ record.balance_after }}</td>
-              <td>{{ record.change_time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
-              <td>
-                <span *ngIf="record.task_id">{{ record.task_name }} (ID: {{ record.task_id }})</span>
-                <span *ngIf="!record.task_id">-</span>
+              <td [ngClass]="{'text-red-500': record.change_amount < 0, 'text-green-500': record.change_amount >= 0}">
+                {{ record.change_amount }}
               </td>
+              <td>{{ record.change_time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
               <td>{{ record.remark }}</td>
             </tr>
           </tbody>
