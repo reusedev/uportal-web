@@ -209,7 +209,7 @@
               <td [ngClass]="{'text-red-500': record.change_amount < 0, 'text-green-500': record.change_amount >= 0}">
                 {{ record.change_amount }}
               </td>
-              <td>{{ record.change_time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+              <td>{{ record.created_at | date:'yyyy-MM-dd HH:mm:ss' }}</td>
               <td>{{ record.remark }}</td>
             </tr>
           </tbody>
