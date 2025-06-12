@@ -99,6 +99,8 @@ export class TaskAddComponent implements OnInit {
       if (this.task) {
         // 如果有传入任务数据，则更新任务
         formData['id'] = this.task.task_id;
+        formData['task_key'] = this.task.task_key; // 保持原有的task_key不变
+        formData['status'] = this.task.status; // 保持原有的状态不变
         this.http.post('/admin/reward-tasks/edit', formData).subscribe({
           next: () => {
             this.drawerRef.close(true);

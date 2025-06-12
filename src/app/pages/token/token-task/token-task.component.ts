@@ -81,7 +81,6 @@ export class TokenTaskComponent implements OnInit {
 
     drawerRef.afterClose.subscribe((data) => {
       if (data) {
-        this.message.success('任务添加成功');
         this.loadTaskList(); // 重新加载任务列表
       }
     });
