@@ -124,7 +124,8 @@ export class TokenConsumeRulesComponent implements OnInit {
       feature =>
         feature.feature_name.toLowerCase().includes(keyword) ||
         feature.feature_desc.toLowerCase().includes(keyword) ||
-        feature.feature_code.toLowerCase().includes(keyword)
+        feature.feature_code.toLowerCase().includes(keyword) ||
+        (feature.classify && feature.classify.toLowerCase().includes(keyword))
     );
   }
 }

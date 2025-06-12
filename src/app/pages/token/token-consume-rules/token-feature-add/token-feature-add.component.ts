@@ -40,6 +40,7 @@ export class TokenFeatureAddComponent implements OnInit {
           [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]
         ],
         status: [this.feature.status], // 保持原状态
+        classify: [this.feature.classify || ''], // 如果有分类字段
       });
       // 如果是编辑模式，禁用feature_code字段
       this.validateForm.get('feature_code')?.disable();
@@ -53,6 +54,7 @@ export class TokenFeatureAddComponent implements OnInit {
          [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]
         ],
         status: [1], // 默认为启用状态
+        classify: [null], // 如果有分类字段
       });
     }
   }

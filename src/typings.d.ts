@@ -21,6 +21,7 @@ interface TokenFeature {
   token_cost: number;
   feature_code: string;
   status: number; // 0: 禁用, 1: 启用
+  classify: string; // 可选分类字段
 }
 
 // 用户数据接口

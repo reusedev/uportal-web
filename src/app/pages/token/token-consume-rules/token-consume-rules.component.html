@@ -17,7 +17,7 @@
       <input
         nz-input
         [(ngModel)]="searchKeyword"
-        placeholder="搜索规则名称或代码"
+        placeholder="搜索规则名称、代码或分类"
         class="border-0 px-0 py-0 text-sm"
         nzBorderless
       />
@@ -84,9 +84,13 @@
               <nz-icon nzType="pay-circle" nzTheme="outline" class="mr-2 text-red-500 text-lg"></nz-icon>
               <span class="text-gray-700 text-lg font-semibold">{{ feature.token_cost }} 代币</span>
             </div>
-             <div class="flex items-center mb-3">
+            <div class="flex items-center mb-3">
               <nz-icon nzType="code" nzTheme="outline" class="mr-2 text-gray-700 text-lg"></nz-icon>
               <span class="text-gray-700 text-lg font-semibold">{{ feature.feature_code }}</span>
+            </div>
+            <div class="flex items-center mb-3">
+              <nz-icon nzType="folder" nzTheme="outline" class="mr-2 text-blue-500 text-lg"></nz-icon>
+              <span class="text-gray-700 text-lg font-semibold">{{ feature.classify || '未分类' }}</span>
             </div>
 
             <div class="mt-3">
@@ -141,6 +145,7 @@
             <th>ID</th>
             <th>规则名称</th>
             <th>规则代码</th>
+            <th>分类</th>
             <th>代币消费</th>
             <th>状态</th>
             <th>操作</th>
@@ -157,6 +162,7 @@
               <div class="text-xs text-gray-500 mt-1">{{ feature.feature_desc }}</div>
             </td>
             <td><nz-tag [nzColor]="'cyan'">{{ feature.feature_code }}</nz-tag></td>
+            <td><nz-tag [nzColor]="'blue'">{{ feature.classify || '未分类' }}</nz-tag></td>
             <td class="font-semibold">{{ feature.token_cost }}</td>
             <td>
               <nz-tag [nzColor]="feature.status === 1 ? 'success' : 'error'">
