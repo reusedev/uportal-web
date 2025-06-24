@@ -93,7 +93,6 @@ export class RechargePlansComponent implements OnInit {
 
     drawerRef.afterClose.subscribe((data) => {
       if (data) {
-        this.message.success('充值方案添加成功');
         this.loadPlanList(); // 重新加载列表
       }
     });
