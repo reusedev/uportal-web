@@ -20,6 +20,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/token/token-consume-rules/token-consume-rules.component').then(m => m.TokenConsumeRulesComponent)
       },
       {
+        path: 'recharge/plans',
+        loadComponent: () => import('./pages/recharge/recharge-plans/recharge-plans.component').then(m => m.RechargePlansComponent)
+      },
+      {
+        path: 'recharge/orders',
+        loadComponent: () => import('./pages/recharge/recharge-orders/recharge-orders.component').then(m => m.RechargeOrdersComponent)
+      },
+      {
         path: 'system/config',
         loadComponent: () => import('./pages/system/system-config/system-config.component').then(m => m.SystemConfigComponent)
       },

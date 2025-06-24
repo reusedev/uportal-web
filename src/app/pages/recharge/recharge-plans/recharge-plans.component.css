@@ -1,0 +1,49 @@
+/* 卡片模式过渡效果 */
+.card-mode .plan-card {
+  transition: all 0.3s ease;
+}
+
+.card-mode .plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 表格模式样式 */
+.table-mode th {
+  font-weight: 600;
+  background-color: #f9fafb;
+}
+
+/* 搜索框样式 */
+.search-box:focus-within {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 视图切换按钮高亮效果 */
+.view-mode-btn.active {
+  color: #1890ff;
+  background-color: #e6f7ff;
+}
+
+/* 自定义表格样式 */
+:host ::ng-deep .ant-table-thead > tr > th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+:host ::ng-deep .ant-tag {
+  border-radius: 4px;
+}
+
+/* 卡片高度统一 */
+.plan-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-card-content {
+  flex-grow: 1;
+}

@@ -1,0 +1,194 @@
+<!-- recharge-plans.component.html -->
+<div class="flex justify-between items-center py-4 border-b border-gray-100">
+  <div class="flex gap-4">
+    <div
+      class="w-10 h-10 flex justify-center items-center rounded-full border border-[#EBEBEB] bg-white shadow-[0_1px_2px_0_rgba(10,13,20,0.03)]">
+      <nz-icon class="text-[16px]" nzType="dollar-circle" nzTheme="outline" />
+    </div>
+    <div class="flex flex-col gap-0">
+      <div class="text-lg font-semibold text-[#0A0D14]">充值方案</div>
+      <div class="text-xs text-[#6B7280]">管理代币充值方案和价格</div>
+    </div>
+  </div>
+
+  <div class="flex gap-2">
+    <!-- 状态筛选下拉 -->
+    <nz-select [(ngModel)]="statusFilter" (ngModelChange)="onStatusFilterChange()" nzPlaceHolder="全部状态" class="w-32">
+      <nz-option nzLabel="全部状态" [nzValue]="null"></nz-option>
+      <nz-option nzLabel="启用" [nzValue]="1"></nz-option>
+      <nz-option nzLabel="禁用" [nzValue]="0"></nz-option>
+    </nz-select>
+
+    <nz-button-group>
+      <button
+        nz-button
+        [nzType]="viewMode === 'card' ? 'primary' : 'default'"
+        class="view-mode-btn"
+        (click)="viewMode = 'card'"
+      >
+        <nz-icon nzType="appstore" nzTheme="outline"></nz-icon>
+      </button>
+      <button
+        nz-button
+        [nzType]="viewMode === 'table' ? 'primary' : 'default'"
+        class="view-mode-btn"
+        (click)="viewMode = 'table'"
+      >
+        <nz-icon nzType="bars" nzTheme="outline"></nz-icon>
+      </button>
+    </nz-button-group>
+
+    <button nz-button nzType="primary" (click)="addPlan()">
+      <nz-icon nzType="plus" nzTheme="outline" />
+      新建方案
+    </button>
+  </div>
+</div>
+
+<!-- 方案列表 -->
+<div class="py-6">
+  <nz-spin [nzSpinning]="loading">
+    <!-- 卡片视图模式 -->
+    <div *ngIf="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+      <!-- 方案卡片 -->
+      @for (plan of filteredPlans; track plan.plan_id) {
+      <nz-ribbon [nzText]="plan.status === 1 ? '启用' : '禁用'" [nzColor]="plan.status === 1 ? 'green' :'red'">
+        <div
+          class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+          <!-- 卡片头部 -->
+          <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+            <div class="flex items-center">
+              <nz-icon nzType="credit-card" nzTheme="twotone" class="text-lg mr-2" [nzTwotoneColor]="'#1890ff'"></nz-icon>
+              <span class="text-base font-medium">充值方案</span>
+            </div>
+          </div>
+
+          <!-- 卡片内容 -->
+          <div class="px-5 py-4 flex-grow">
+            <!-- 代币数量 -->
+            <div class="flex items-center mb-3">
+              <nz-icon nzType="wallet" nzTheme="outline" class="mr-2 text-blue-500 text-lg"></nz-icon>
+              <span class="text-gray-700 text-lg font-semibold">{{ plan.token_amount }} 代币</span>
+            </div>
+
+            <!-- 价格 -->
+            <div class="flex items-center mb-3">
+              <nz-icon nzType="dollar" nzTheme="outline" class="mr-2 text-green-500 text-lg"></nz-icon>
+              <span class="text-gray-700 text-lg font-semibold">{{ plan.price }} {{ plan.currency }}</span>
+            </div>
+
+            <!-- 性价比 -->
+            <div class="flex items-center mb-3">
+              <nz-icon nzType="calculator" nzTheme="outline" class="mr-2 text-orange-500 text-lg"></nz-icon>
+              <span class="text-gray-700 text-sm">{{ (plan.token_amount / plan.price).toFixed(2) }} 代币/元</span>
+            </div>
+
+            <!-- 描述 -->
+            <div class="mt-3">
+              <p nz-tooltip [nzTooltipTitle]="plan.description" class="text-gray-600">
+                {{ plan.description }}
+              </p>
+            </div>
+          </div>
+
+          <!-- 卡片底部 -->
+          <div class="px-5 py-3 bg-gray-50 flex justify-between border-t border-gray-100">
+            <button (click)="editPlan(plan)" nz-button nzType="text"
+              class="text-blue-500 hover:text-blue-600 flex items-center">
+              <nz-icon nzType="edit" nzTheme="outline" class="mr-1"></nz-icon>
+              <span>编辑</span>
+            </button>
+
+            <button nz-button nz-popconfirm [nzPopconfirmTitle]="plan.status === 1 ? '确定要禁用此方案吗?' : '确定要启用此方案吗?'"
+              (nzOnConfirm)="togglePlanStatus(plan)" class="flex items-center"
+              [ngClass]="plan.status === 1 ? 'text-red-500 hover:text-red-600' : 'text-green-500 hover:text-green-600'"
+              nzType="text">
+              <nz-icon [nzType]="plan.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline" class="mr-1"></nz-icon>
+              <span>{{ plan.status === 1 ? '禁用' : '启用' }}</span>
+            </button>
+          </div>
+        </div>
+      </nz-ribbon>
+      }
+
+      <!-- 无数据时显示 -->
+      <div *ngIf="filteredPlans.length === 0" class="col-span-full">
+        <nz-empty nzDescription="暂无方案数据" [nzNotFoundContent]="emptyTpl">
+          <ng-template #emptyTpl>
+            <span>{{ statusFilter !== null ? '当前状态下没有方案' : '暂无方案数据，点击"新建方案"按钮创建' }}</span>
+          </ng-template>
+        </nz-empty>
+      </div>
+    </div>
+
+    <!-- 表格视图模式 -->
+    <div *ngIf="viewMode === 'table'" class="overflow-hidden bg-white rounded-lg border border-gray-200 shadow-sm">
+      <nz-table
+        #basicTable
+        [nzData]="filteredPlans"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzPageSize]="10"
+        class="w-full"
+      >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>代币数量</th>
+            <th>价格</th>
+            <th>币种</th>
+            <th>性价比</th>
+            <th>描述</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let plan of basicTable.data">
+            <td>{{ plan.plan_id }}</td>
+            <td>
+              <div class="flex items-center">
+                <nz-icon nzType="wallet" nzTheme="twotone" class="mr-2" [nzTwotoneColor]="'#1890ff'"></nz-icon>
+                <span class="font-semibold">{{ plan.token_amount }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="flex items-center">
+                <nz-icon nzType="dollar" nzTheme="outline" class="mr-1 text-green-500"></nz-icon>
+                <span class="font-semibold">{{ plan.price }}</span>
+              </div>
+            </td>
+            <td><nz-tag [nzColor]="'blue'">{{ plan.currency }}</nz-tag></td>
+            <td class="text-sm text-gray-600">{{ (plan.token_amount / plan.price).toFixed(2) }} 代币/元</td>
+            <td>{{ plan.description }}</td>
+            <td>
+              <nz-tag [nzColor]="plan.status === 1 ? 'success' : 'error'">
+                {{ plan.status === 1 ? '启用' : '禁用' }}
+              </nz-tag>
+            </td>
+            <td>
+               <div class="flex gap-2">
+                <button nz-button nzType="primary" nzSize="small" (click)="editPlan(plan)">
+                  <nz-icon nzType="edit" nzTheme="outline"></nz-icon>
+                  编辑
+                </button>
+                <button
+                  nz-button
+                  nzType="default"
+                  [ngClass]="plan.status === 1 ? 'text-red-500 hover:text-red-600' : 'text-green-500 hover:text-green-600'"
+                  nzSize="small"
+                  nz-popconfirm
+                  [nzPopconfirmTitle]="plan.status === 1 ? '确定要禁用此方案吗?' : '确定要启用此方案吗?'"
+                  (nzOnConfirm)="togglePlanStatus(plan)"
+                >
+                  <nz-icon [nzType]="plan.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline"></nz-icon>
+                  {{ plan.status === 1 ? '禁用' : '启用' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-spin>
+</div>

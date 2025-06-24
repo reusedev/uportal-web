@@ -1,0 +1,153 @@
+<!-- recharge-orders.component.html -->
+<div class="flex justify-between items-center py-4 border-b border-gray-100">
+  <div class="flex gap-4">
+    <div
+      class="w-10 h-10 flex justify-center items-center rounded-full border border-[#EBEBEB] bg-white shadow-[0_1px_2px_0_rgba(10,13,20,0.03)]">
+      <nz-icon class="text-[16px]" nzType="transaction" nzTheme="outline" />
+    </div>
+    <div class="flex flex-col gap-0">
+      <div class="text-lg font-semibold text-[#0A0D14]">充值订单</div>
+      <div class="text-xs text-[#6B7280]">查看和管理用户充值订单</div>
+    </div>
+  </div>
+</div>
+
+<!-- 搜索区域 -->
+<div class="py-4 bg-white rounded-lg border border-gray-200 shadow-sm mb-4">
+  <div class="px-6">
+    <div class="flex flex-wrap gap-4 items-end">
+      <div class="flex-1 min-w-0">
+        <label class="block text-sm font-medium text-gray-700 mb-1">用户ID</label>
+        <input nz-input [(ngModel)]="searchForm.user_id" placeholder="请输入用户ID" class="w-full">
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <label class="block text-sm font-medium text-gray-700 mb-1">订单状态</label>
+        <nz-select  nzAllowClear [(ngModel)]="searchForm.status" nzPlaceHolder="请选择状态" class="w-full">
+          <nz-option *ngFor="let option of statusOptions" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <label class="block text-sm font-medium text-gray-700 mb-1">开始时间</label>
+        <nz-date-picker [(ngModel)]="searchForm.start_time" nzPlaceHolder="请选择开始时间" class="w-full"></nz-date-picker>
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <label class="block text-sm font-medium text-gray-700 mb-1">结束时间</label>
+        <nz-date-picker [(ngModel)]="searchForm.end_time" nzPlaceHolder="请选择结束时间" class="w-full"></nz-date-picker>
+      </div>
+
+      <div class="flex gap-2">
+        <button nz-button nzType="primary" (click)="onSearch()" [nzLoading]="loading">
+          <nz-icon nzType="search"></nz-icon>
+          搜索
+        </button>
+        <button nz-button nzType="default" (click)="onReset()">
+          <nz-icon nzType="reload"></nz-icon>
+          重置
+        </button>
+      </div>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="mt-4 pt-4 border-t border-gray-100">
+      <div class="grid grid-cols-3 md:grid-cols-3 gap-4 text-center">
+        <div class="bg-yellow-50 rounded-lg p-3">
+          <div class="text-lg font-bold text-yellow-600">{{pending_num }}</div>
+          <div class="text-xs text-gray-600">待支付</div>
+        </div>
+        <div class="bg-blue-50 rounded-lg p-3">
+          <div class="text-lg font-bold text-blue-600">{{ success_num }}</div>
+          <div class="text-xs text-gray-600">支付成功</div>
+        </div>
+        <div class="bg-red-50 rounded-lg p-3">
+          <div class="text-lg font-bold text-red-600">{{ failed_num }}</div>
+          <div class="text-xs text-gray-600">支付失败</div>
+        </div>
+        <!-- <div class="bg-gray-50 rounded-lg p-3">
+          <div class="text-lg font-bold text-gray-600">{{ getStatsByStatus(3) }}</div>
+          <div class="text-xs text-gray-600">已退款</div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 订单列表 -->
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+  <nz-table #orderTable [nzData]="orderList" [nzLoading]="loading" [nzTotal]="totalCount" [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex" [nzShowPagination]="true" [nzShowSizeChanger]="true" [nzShowQuickJumper]="true"
+    [nzShowTotal]="totalTemplate" (nzPageIndexChange)="onPageChange($event)"
+    (nzPageSizeChange)="onPageSizeChange($event)" nzSize="middle">
+    <thead>
+      <tr>
+        <th>订单ID</th>
+        <th>用户信息</th>
+        <th>充值方案</th>
+        <th>支付金额</th>
+        <th>支付方式</th>
+        <th>交易号</th>
+        <th>订单状态</th>
+        <th>创建时间</th>
+        <th>支付时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orderTable.data">
+        <td class="w-[100px]">
+          <span class="font-mono text-sm">{{ order.order_id }}</span>
+        </td>
+        <td>
+          <div class="flex flex-col w-[120px]">
+            <span class="font-medium">{{ order.nickname }}</span>
+            <span class="text-xs text-gray-500">ID: {{ order.user_id }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex flex-col w-[120px]">
+            <div class="flex items-center">
+              <nz-icon nzType="wallet" nzTheme="outline" class="mr-1 text-blue-500"></nz-icon>
+              <span class="font-semibold">{{ order.token_amount }} 代币</span>
+            </div>
+            <span class="text-xs text-gray-500">方案ID: {{ order.plan_id }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center w-[100px]">
+            <nz-icon nzType="dollar" nzTheme="outline" class="mr-1 text-green-500"></nz-icon>
+            <span class="font-semibold">{{ formatAmount(order.amount_paid) }}</span>
+          </div>
+        </td>
+        <td class="w-[100px]">
+          <nz-tag [nzColor]="'blue'">{{ paymentMethodMap[order.payment_method] || order.payment_method }}</nz-tag>
+        </td>
+        <td class="w-[100px]">
+          <span class="font-mono text-xs">{{ order.transaction_id }}</span>
+        </td>
+        <td class="w-[100px]">
+          <nz-tag [nzColor]="statusColorMap[order.status]">
+            {{ statusTextMap[order.status] }}
+          </nz-tag>
+        </td>
+        <td>
+          <span class="text-xs">{{order.created_at}}</span>
+        </td>
+        <td>
+          <span class="text-xs">{{ order.paid_at}}</span>
+        </td>
+        <td>
+          <button nz-button nzType="primary" nzSize="small" (click)="viewOrderDetail(order.order_id)">
+            <nz-icon nzType="eye" nzTheme="outline"></nz-icon>
+            详情
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <ng-template #totalTemplate let-total let-range="range">
+    共 {{ total }} 条记录，第 {{ range[0] }}-{{ range[1] }} 条
+  </ng-template>
+</div>

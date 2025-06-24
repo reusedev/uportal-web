@@ -62,3 +62,30 @@ interface TokenRecord {
   remark: string;
   created_at: string;
 }
+
+// 充值方案接口
+interface RechargePlan {
+  plan_id: number;
+  token_amount: number;
+  price: number;
+  currency: string;
+  description: string;
+  status: number; // 0: 禁用, 1: 启用
+  created_at: string;
+}
+
+// 充值订单接口
+interface RechargeOrder {
+  order_id: number;
+  user_id: number;
+  nickname: string;
+  plan_id: number;
+  plan_name?: string;
+  token_amount: number;
+  amount_paid: number;
+  payment_method: string;
+  status: number; // 0: 待支付, 1: 支付成功, 2: 支付失败, 3: 已退款
+  transaction_id: string;
+  created_at: string;
+  paid_at: string;
+}

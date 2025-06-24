@@ -56,6 +56,23 @@ export class LayoutComponent implements OnInit {
         },
       ],
     },
+    {
+      label: '充值管理',
+      icon: 'dollar-circle',
+      active: false,
+      children: [
+        {
+          label: '充值方案',
+          link: '/recharge/plans',
+          active: false,
+        },
+        {
+          label: '充值订单',
+          link: '/recharge/orders',
+          active: false,
+        },
+      ],
+    },
   ];
 
   userInfo:any = {}

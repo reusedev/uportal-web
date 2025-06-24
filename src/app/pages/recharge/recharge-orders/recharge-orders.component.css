@@ -1,0 +1,45 @@
+/* 搜索表单样式 */
+.search-form {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.search-form .ant-form-item {
+  margin-bottom: 8px;
+}
+
+/* 表格样式优化 */
+:host ::ng-deep .ant-table-thead > tr > th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+:host ::ng-deep .ant-table-tbody > tr:hover > td {
+  background-color: #f9fafb;
+}
+
+/* 状态标签样式 */
+:host ::ng-deep .ant-tag {
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* 分页样式 */
+:host ::ng-deep .ant-pagination {
+  margin: 16px 0;
+  text-align: right;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .search-form {
+    padding: 12px;
+  }
+
+  .search-form .ant-form-item {
+    margin-bottom: 12px;
+  }
+}
