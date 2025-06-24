@@ -74,6 +74,7 @@ export class RechargeOrdersComponent implements OnInit {
 
   ngOnInit() {
     this.loadOrderList();
+    this.getOrderStatusCount(); // 获取订单分类详情
   }
 
   // 获取订单分类详情

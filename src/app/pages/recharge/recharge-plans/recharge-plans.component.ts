@@ -64,7 +64,7 @@ export class RechargePlansComponent implements OnInit {
   // 切换方案状态
   togglePlanStatus(plan: RechargePlan): void {
     const params = {
-      plan_id: plan.plan_id,
+     ...plan,
       status: plan.status === 1 ? 0 : 1, // 切换状态
     };
 

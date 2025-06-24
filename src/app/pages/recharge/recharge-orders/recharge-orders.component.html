@@ -82,7 +82,7 @@
     (nzPageSizeChange)="onPageSizeChange($event)" nzSize="middle">
     <thead>
       <tr>
-        <th>订单ID</th>
+        <th>ID</th>
         <th>用户信息</th>
         <th>充值方案</th>
         <th>支付金额</th>
@@ -96,13 +96,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let order of orderTable.data">
-        <td class="w-[100px]">
+        <td class="w-[80px]">
           <span class="font-mono text-sm">{{ order.order_id }}</span>
         </td>
         <td>
           <div class="flex flex-col w-[120px]">
             <span class="font-medium">{{ order.nickname }}</span>
-            <span class="text-xs text-gray-500">ID: {{ order.user_id }}</span>
+            <span class="text-xs text-gray-500">{{ order.user_id }}</span>
           </div>
         </td>
         <td>
@@ -111,7 +111,7 @@
               <nz-icon nzType="wallet" nzTheme="outline" class="mr-1 text-blue-500"></nz-icon>
               <span class="font-semibold">{{ order.token_amount }} 代币</span>
             </div>
-            <span class="text-xs text-gray-500">方案ID: {{ order.plan_id }}</span>
+            <span class="text-xs text-gray-500">方案: {{ order.plan_name }}</span>
           </div>
         </td>
         <td>
@@ -132,10 +132,10 @@
           </nz-tag>
         </td>
         <td>
-          <span class="text-xs">{{order.created_at}}</span>
+          <span class="text-xs">{{order.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
         </td>
         <td>
-          <span class="text-xs">{{ order.paid_at}}</span>
+          <span class="text-xs">{{ order.paid_at | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
         </td>
         <td>
           <button nz-button nzType="primary" nzSize="small" (click)="viewOrderDetail(order.order_id)">
