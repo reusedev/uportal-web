@@ -79,7 +79,7 @@ export class TaskAddComponent implements OnInit {
       });
 
       // 如果是编辑模式，禁用task_key字段
-      this.validateForm.get('task_key')?.disable();
+      // this.validateForm.get('task_key')?.disable();
     } else {
       this.validateForm = this.fb.group({
         logo: [null,[Validators.required]],
@@ -123,7 +123,7 @@ export class TaskAddComponent implements OnInit {
       if (this.task) {
         // 如果有传入任务数据，则更新任务
         formData['id'] = this.task.task_id;
-        formData['task_key'] = this.task.task_key; // 保持原有的task_key不变
+        // formData['task_key'] = this.task.task_key; // 保持原有的task_key不变
         formData['status'] = this.task.status; // 保持原有的状态不变
         this.http.post('/admin/reward-tasks/edit', formData).subscribe({
           next: () => {
