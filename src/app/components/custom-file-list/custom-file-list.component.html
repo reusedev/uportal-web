@@ -1,0 +1,62 @@
+    <nz-upload
+      [(nzFileList)]="fileList"
+      [nzListType]="props.listType"
+      [nzShowButton]="showButton"
+      [nzShowUploadList]="props.mode !== 'single' || ['picture-card', 'picture'].includes(props.listType)"
+      [nzBeforeUpload]="beforeUpload"
+      [nzRemove]="onRemove"
+      [nzPreview]="onPreview"
+      [nzCustomRequest]="customRequest"
+      (nzChange)="onUploadChange($event)"
+    >
+      <ng-container [ngSwitch]="props.listType">
+        <ng-container *ngSwitchCase="'picture-card'">
+          <div>
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+            <br/>
+            <span>点击上传</span>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'picture'">
+          <button nz-button>
+           <span nz-icon nzType="upload" nzTheme="outline"></span>
+            <span>点击上传</span>
+          </button>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <button nz-button *ngIf="props.mode !== 'single'">
+           <span nz-icon nzType="upload" nzTheme="outline"></span>
+            <span>点击上传</span>
+          </button>
+          <div *ngIf="props.mode === 'single'">
+            <nz-input-group nzAddOnBefore="选择文件" [nzSuffix]="SingleUploadSelectTpl" class="single-upload-selector">
+              <input type="text" nz-input [ngModel]="fileList.length ? fileList[fileList.length - 1].name : null" readonly/>
+              <ng-template #SingleUploadSelectTpl>
+                <ng-container *ngIf="fileList.length">
+                  <button
+                    *ngIf="fileList[fileList.length - 1].status === 'uploading'"
+                    nz-button
+                    nzType="text"
+                    nzSize="small"
+                    class="single-upload-action"
+                    style="background-color: transparent;"
+                  >
+                    <span nz-icon nzType="loading" nzTheme="outline"></span>
+                  </button>
+                  <button
+                    *ngIf="fileList[fileList.length - 1].url"
+                    nz-button
+                    nzType="text"
+                    nzSize="small"
+                    class="single-upload-action"
+                    (click)="onDownload(fileList[fileList.length - 1])"
+                  >
+                   <span nz-icon nzType="download" nzTheme="outline"></span>
+                  </button>
+                </ng-container>
+              </ng-template>
+            </nz-input-group>
+          </div>
+        </ng-container>
+      </ng-container>
+    </nz-upload>

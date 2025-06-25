@@ -1,0 +1,16 @@
+      .single-upload-selector {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .single-upload-action {
+        color: rgba(0, 0, 0, 0.45);
+        width: 22px;
+        height: 22px;
+      }
+      .single-upload-action:hover {
+        color: rgba(0, 0, 0, 0.85);
+      }

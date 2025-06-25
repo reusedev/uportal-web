@@ -6,13 +6,14 @@ import { format, parse } from 'date-fns';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { CustomFileListComponent } from '../../../../components/custom-file-list/custom-file-list.component';
 
 @Component({
   standalone: true,
   selector: 'app-task-add',
   templateUrl: './task-add.component.html',
   styleUrls: ['./task-add.component.css'],
-  imports: [PublicModule, NgIf],
+  imports: [PublicModule, NgIf, CustomFileListComponent],
 })
 export class TaskAddComponent implements OnInit {
   @Input() task!: TokenTask;
@@ -26,11 +27,22 @@ export class TaskAddComponent implements OnInit {
 
   loading = false;
 
+  fileParams:any = {
+    mode: 'single',
+    limit: 1,
+    exts: '.jpg,.png,.jpeg,.webp,.svg,.gif',
+    size: 1024 * 1024 * 50,
+    listType: 'picture-card',
+    showButton: true,
+  };
+
   ngOnInit() {
-    console.log(this.task);
     if (this.task) {
       // 如果有传入任务数据，则初始化表单
       this.validateForm = this.fb.group({
+        logo: [this.task.logo],
+        action: [this.task.action, [Validators.required]],
+        params: [this.task.params],
         task_name: [this.task.task_name, [Validators.required]],
         task_desc: [this.task.task_desc],
         token_reward: [
@@ -59,13 +71,19 @@ export class TaskAddComponent implements OnInit {
         ],
         repeatable: [this.task.repeatable, [Validators.required]],
         status: [this.task.status], // 默认为禁用状态
-        task_key: [this.task.task_key, [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]],
+        task_key: [
+          this.task.task_key,
+          [Validators.required, Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)],
+        ],
       });
 
       // 如果是编辑模式，禁用task_key字段
       this.validateForm.get('task_key')?.disable();
     } else {
       this.validateForm = this.fb.group({
+        logo: [null],
+        action:[null, [Validators.required]],
+        params:[null],
         task_name: [null, [Validators.required]],
         task_desc: [null],
         token_reward: [null, [Validators.required, Validators.min(1)]],
@@ -75,7 +93,10 @@ export class TaskAddComponent implements OnInit {
         valid_to: [null],
         repeatable: [1, [Validators.required]],
         status: [0], // 默认为禁用状态
-        task_key: [null, [Validators.required,Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)]],
+        task_key: [
+          null,
+          [Validators.required, Validators.pattern(/^[a-zA-Z][a-zA-Z0-9_]*$/)],
+        ],
       });
     }
   }
@@ -85,6 +106,7 @@ export class TaskAddComponent implements OnInit {
   }
 
   submit() {
+    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       this.loading = true;
 

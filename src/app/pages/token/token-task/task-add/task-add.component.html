@@ -3,6 +3,12 @@
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical">
       <nz-form-item>
+        <nz-form-label>Logo</nz-form-label>
+        <nz-form-control>
+          <app-customer-file-list [props]="fileParams" formControlName="logo"></app-customer-file-list>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
         <nz-form-label nzRequired>任务标识</nz-form-label>
         <nz-form-control [nzErrorTip]="configKeyErrorTpl">
           <input nz-input formControlName="task_key" placeholder="请输入任务标识" />
@@ -69,6 +75,7 @@
         </nz-form-control>
       </nz-form-item>
 
+
       <nz-form-item>
         <nz-form-label nzRequired>是否可重复</nz-form-label>
         <nz-form-control>
@@ -76,6 +83,20 @@
             <label nz-radio [nzValue]="1">可重复</label>
             <label nz-radio [nzValue]="0">不可重复</label>
           </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Action</nz-form-label>
+        <nz-form-control nzErrorTip="请输入任务 Action">
+          <input nz-input formControlName="action" placeholder="请输入任务名称" />
+        </nz-form-control>
+      </nz-form-item>
+
+       <nz-form-item>
+        <nz-form-label>参数</nz-form-label>
+        <nz-form-control >
+          <input nz-input formControlName="params" placeholder="请输入餐素" />
         </nz-form-control>
       </nz-form-item>
 

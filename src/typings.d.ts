@@ -11,6 +11,12 @@ interface TokenTask {
   valid_from:string;
   valid_to:string;
   task_key: string;
+  logo:{
+    id:string;
+    url:string;
+  },
+  action:string;
+  params:string
 }
 
 // 代币消费特性数据接口

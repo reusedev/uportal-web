@@ -18,3 +18,13 @@
   padding: 20px;
   overflow-y: auto;
 }
+
+
+:host ::ng-deep .ant-image-preview-img{
+  margin: auto;
+}
+
+:host ::ng-deep .ant-image-preview-img-wrapper::before{
+  width: 0 !important;
+  height: 0 !important;
+}
