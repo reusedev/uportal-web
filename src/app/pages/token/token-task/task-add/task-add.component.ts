@@ -40,8 +40,9 @@ export class TaskAddComponent implements OnInit {
     if (this.task) {
       // 如果有传入任务数据，则初始化表单
       this.validateForm = this.fb.group({
-        logo: [this.task.logo],
+        logo: [this.task.logo,[Validators.required]],
         action: [this.task.action, [Validators.required]],
+        action_text: [this.task.action_text, [Validators.required]],
         params: [this.task.params],
         task_name: [this.task.task_name, [Validators.required]],
         task_desc: [this.task.task_desc],
@@ -81,8 +82,9 @@ export class TaskAddComponent implements OnInit {
       this.validateForm.get('task_key')?.disable();
     } else {
       this.validateForm = this.fb.group({
-        logo: [null],
+        logo: [null,[Validators.required]],
         action:[null, [Validators.required]],
+        action_text: [null, [Validators.required]],
         params:[null],
         task_name: [null, [Validators.required]],
         task_desc: [null],

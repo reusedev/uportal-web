@@ -3,16 +3,39 @@
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical">
       <nz-form-item>
-        <nz-form-label>Logo</nz-form-label>
-        <nz-form-control>
+        <nz-form-label nzRequired>Logo</nz-form-label>
+        <nz-form-control nzErrorTip="请上传 Logo">
           <app-customer-file-list [props]="fileParams" formControlName="logo"></app-customer-file-list>
         </nz-form-control>
       </nz-form-item>
+
+      <div class="grid grid-cols-2 gap-x-4">
+        <nz-form-item>
+          <nz-form-label nzRequired>Action</nz-form-label>
+          <nz-form-control nzErrorTip="请输入任务 Action">
+            <input nz-input formControlName="action" placeholder="请输入任务 Action" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzRequired>Action Text</nz-form-label>
+          <nz-form-control nzErrorTip="请输入任务文案">
+            <input nz-input formControlName="action_text" placeholder="请输入任务文案" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>Params</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="params" placeholder="请输入参数" />
+        </nz-form-control>
+      </nz-form-item>
+
       <nz-form-item>
         <nz-form-label nzRequired>任务标识</nz-form-label>
         <nz-form-control [nzErrorTip]="configKeyErrorTpl">
           <input nz-input formControlName="task_key" placeholder="请输入任务标识" />
-
           <div class="mt-1 text-xs text-gray-500">任务标识应由字母、数字和下划线组成，以字母开头</div>
           <ng-template #configKeyErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">请输入任务标识</ng-container>
@@ -83,20 +106,6 @@
             <label nz-radio [nzValue]="1">可重复</label>
             <label nz-radio [nzValue]="0">不可重复</label>
           </nz-radio-group>
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label nzRequired>Action</nz-form-label>
-        <nz-form-control nzErrorTip="请输入任务 Action">
-          <input nz-input formControlName="action" placeholder="请输入任务名称" />
-        </nz-form-control>
-      </nz-form-item>
-
-       <nz-form-item>
-        <nz-form-label>参数</nz-form-label>
-        <nz-form-control >
-          <input nz-input formControlName="params" placeholder="请输入餐素" />
         </nz-form-control>
       </nz-form-item>
 

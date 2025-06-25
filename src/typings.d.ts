@@ -17,6 +17,7 @@ interface TokenTask {
   },
   action:string;
   params:string
+  action_text:string;
 }
 
 // 代币消费特性数据接口
