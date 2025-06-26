@@ -52,7 +52,7 @@ export class TaskAddComponent implements OnInit {
         ],
         daily_limit: [
           this.task.daily_limit,
-          [Validators.required, Validators.min(1)],
+          [Validators.required, Validators.min(0)],
         ],
         interval_seconds: [
           this.task.interval_seconds,
@@ -89,7 +89,7 @@ export class TaskAddComponent implements OnInit {
         task_name: [null, [Validators.required]],
         task_desc: [null],
         token_reward: [null, [Validators.required, Validators.min(1)]],
-        daily_limit: [null, [Validators.required, Validators.min(1)]],
+        daily_limit: [null, [Validators.required, Validators.min(0)]],
         interval_seconds: [null, [Validators.required, Validators.min(0)]],
         valid_from: [null, [Validators.required]],
         valid_to: [null],
