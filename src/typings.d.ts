@@ -79,6 +79,9 @@ interface RechargePlan {
   description: string;
   status: number; // 0: 禁用, 1: 启用
   created_at: string;
+  name: string; // 新增名称字段
+  tag: string; // 新增标签字段
+  is_recommend: number; // 新增推荐字段，默认为 false
 }
 
 // 充值订单接口

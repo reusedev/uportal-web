@@ -54,17 +54,35 @@
       @for (plan of filteredPlans; track plan.plan_id) {
       <nz-ribbon [nzText]="plan.status === 1 ? '启用' : '禁用'" [nzColor]="plan.status === 1 ? 'green' :'red'">
         <div
-          class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+          class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full relative"
+         >
+         <!--  [ngClass]="{'ring-2 ring-yellow-300 ring-opacity-50': plan.is_recommend === 1}" -->
           <!-- 卡片头部 -->
-          <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+          <div class="px-5 py-4 border-b border-gray-100">
             <div class="flex items-center">
               <nz-icon nzType="credit-card" nzTheme="twotone" class="text-lg mr-2" [nzTwotoneColor]="'#1890ff'"></nz-icon>
-              <span class="text-base font-medium">充值方案</span>
+              <span class="text-base font-medium">{{plan.name || '充值方案'}}</span>
             </div>
           </div>
 
           <!-- 卡片内容 -->
-          <div class="px-5 py-4 flex-grow">
+          <div class="px-5 py-4 flex-grow relative">
+            <!-- 推荐水印 -->
+            <div *ngIf="plan.is_recommend === 1" class="absolute top-2 right-2 opacity-30 pointer-events-none">
+              <div class="flex flex-col items-center text-yellow-500">
+                <nz-icon nzType="star" nzTheme="fill" class="text-4xl"></nz-icon>
+                <span class="text-xs font-bold mt-1">推荐</span>
+              </div>
+            </div>
+
+            <!-- 标签 -->
+            <div class="flex items-center gap-2 mb-3" *ngIf="plan.tag">
+              <nz-tag nzColor="blue" class="text-xs">
+                <nz-icon nzType="tag" nzTheme="outline" class="mr-1"></nz-icon>
+                {{plan.tag}}
+              </nz-tag>
+            </div>
+
             <!-- 代币数量 -->
             <div class="flex items-center mb-3">
               <nz-icon nzType="wallet" nzTheme="outline" class="mr-2 text-blue-500 text-lg"></nz-icon>
@@ -92,7 +110,7 @@
           </div>
 
           <!-- 卡片底部 -->
-          <div class="px-5 py-3 bg-gray-50 flex justify-between border-t border-gray-100">
+          <div class="px-5 py-3 bg-gray-50 flex justify-between items-center border-t border-gray-100">
             <button (click)="editPlan(plan)" nz-button nzType="text"
               class="text-blue-500 hover:text-blue-600 flex items-center">
               <nz-icon nzType="edit" nzTheme="outline" class="mr-1"></nz-icon>
@@ -134,11 +152,14 @@
         <thead>
           <tr>
             <th>ID</th>
+            <th>方案名称</th>
+            <th>标签</th>
             <th>代币数量</th>
             <th>价格</th>
             <th>币种</th>
             <th>性价比</th>
             <th>描述</th>
+            <th>推荐</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -146,6 +167,19 @@
         <tbody>
           <tr *ngFor="let plan of basicTable.data">
             <td>{{ plan.plan_id }}</td>
+            <td>
+              <div class="flex items-center">
+                <nz-icon nzType="credit-card" nzTheme="twotone" class="mr-2" [nzTwotoneColor]="'#1890ff'"></nz-icon>
+                <span class="font-medium">{{ plan.name || '充值方案' }}</span>
+              </div>
+            </td>
+            <td>
+              <nz-tag *ngIf="plan.tag" nzColor="blue" class="text-xs">
+                <nz-icon nzType="tag" nzTheme="outline" class="mr-1"></nz-icon>
+                {{ plan.tag }}
+              </nz-tag>
+              <span *ngIf="!plan.tag" class="text-gray-400">-</span>
+            </td>
             <td>
               <div class="flex items-center">
                 <nz-icon nzType="wallet" nzTheme="twotone" class="mr-2" [nzTwotoneColor]="'#1890ff'"></nz-icon>
@@ -161,6 +195,13 @@
             <td><nz-tag [nzColor]="'blue'">{{ plan.currency }}</nz-tag></td>
             <td class="text-sm text-gray-600">{{ (plan.token_amount / plan.price).toFixed(2) }} 代币/元</td>
             <td>{{ plan.description }}</td>
+            <td>
+              <nz-tag *ngIf="plan.is_recommend === 1" nzColor="gold">
+                <nz-icon nzType="star" nzTheme="fill" class="mr-1"></nz-icon>
+                推荐
+              </nz-tag>
+              <span *ngIf="plan.is_recommend !== 1" class="text-gray-400">-</span>
+            </td>
             <td>
               <nz-tag [nzColor]="plan.status === 1 ? 'success' : 'error'">
                 {{ plan.status === 1 ? '启用' : '禁用' }}

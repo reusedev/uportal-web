@@ -3,9 +3,23 @@
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical">
       <nz-form-item>
+        <nz-form-label nzRequired>方案名称</nz-form-label>
+        <nz-form-control nzErrorTip="请输入方案名称">
+          <input nz-input formControlName="name" placeholder="请输入方案名称" class="w-full" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>方案标签</nz-form-label>
+        <nz-form-control nzErrorTip="请输入方案标签">
+          <input nz-input formControlName="tag" placeholder="请输入方案标签" class="w-full" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
         <nz-form-label nzRequired>代币数量</nz-form-label>
         <nz-form-control nzErrorTip="请输入代币数量">
-          <nz-input-number formControlName="token_amount" [nzMin]="1" [nzStep]="100" [nzPlaceHolder]="'请输入代币数量'"
+          <nz-input-number formControlName="token_amount" [nzMin]="1" [nzStep]="100" nzPlaceHolder="请输入代币数量"
             class="w-full"></nz-input-number>
         </nz-form-control>
       </nz-form-item>
@@ -14,7 +28,7 @@
         <nz-form-item>
           <nz-form-label nzRequired>价格</nz-form-label>
           <nz-form-control nzErrorTip="请输入价格">
-            <nz-input-number formControlName="price" [nzMin]="0.01" [nzStep]="0.01" [nzPlaceHolder]="'请输入价格'"
+            <nz-input-number formControlName="price" [nzMin]="0.01" [nzStep]="0.01" nzPlaceHolder="请输入价格"
               class="w-full"></nz-input-number>
           </nz-form-control>
         </nz-form-item>
@@ -23,7 +37,8 @@
           <nz-form-label nzRequired>币种</nz-form-label>
           <nz-form-control nzErrorTip="请选择币种">
             <nz-select formControlName="currency" nzPlaceHolder="请选择币种">
-              <nz-option *ngFor="let option of currencyOptions" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+              <nz-option *ngFor="let option of currencyOptions" [nzLabel]="option.label"
+                [nzValue]="option.value"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -38,6 +53,16 @@
       </nz-form-item>
 
       <nz-form-item>
+        <nz-form-label nzRequired>是否推荐</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group formControlName="is_recommend">
+            <label nz-radio [nzValue]="1">是</label>
+            <label nz-radio [nzValue]="0">否</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
         <nz-form-label nzRequired>状态</nz-form-label>
         <nz-form-control>
           <nz-radio-group formControlName="status">
@@ -48,7 +73,8 @@
       </nz-form-item>
 
       <!-- 性价比预览 -->
-      <nz-form-item class="flex flex-col" *ngIf="validateForm.get('token_amount')?.value && validateForm.get('price')?.value">
+      <nz-form-item class="flex flex-col"
+        *ngIf="validateForm.get('token_amount')?.value && validateForm.get('price')?.value">
         <nz-form-label>性价比预览</nz-form-label>
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
           <div class="grid grid-cols-2 gap-4 text-sm">
@@ -66,7 +92,8 @@
             </div>
           </div>
           <div class="mt-2 text-xs text-gray-500 text-center">
-            用户支付 {{ validateForm.get('price')?.value }} {{ validateForm.get('currency')?.value }} 可获得 {{ validateForm.get('token_amount')?.value }} 代币
+            用户支付 {{ validateForm.get('price')?.value }} {{ validateForm.get('currency')?.value }} 可获得 {{
+            validateForm.get('token_amount')?.value }} 代币
           </div>
         </div>
       </nz-form-item>

@@ -41,6 +41,9 @@ export class RechargePlanAddComponent implements OnInit {
         currency: [this.plan.currency, [Validators.required]],
         description: [this.plan.description, [Validators.required]],
         status: [this.plan.status],
+        name: [this.plan.name, [Validators.required]], // 新增名称字段
+        tag: [this.plan.tag, [Validators.required]], // 新增标签字段
+        is_recommend: [this.plan.is_recommend || 0], // 新增推荐字段，默认为 false
       });
     } else {
       // 新增模式
@@ -50,6 +53,9 @@ export class RechargePlanAddComponent implements OnInit {
         currency: ['CNY', [Validators.required]],
         description: [null, [Validators.required]],
         status: [1], // 默认启用
+        name: [null, [Validators.required]], // 新增名称字段
+        tag: [null, [Validators.required]], // 新增标签字段
+        is_recommend: [0], // 新增推荐字段，默认为 false
       });
     }
   }
