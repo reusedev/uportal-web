@@ -73,6 +73,9 @@ export class TokenFeatureAddComponent implements OnInit {
       if (this.feature) {
         // 如果有传入特性数据，则更新特性
         formData['feature_id'] = this.feature.feature_id;
+        // feature_code
+        formData['feature_code'] = this.feature.feature_code; // 保持原有的 feature_code 不变
+
         this.http.post('/admin/token-consume-rules/update', formData).subscribe({
           next: () => {
             this.drawerRef.close(true);
