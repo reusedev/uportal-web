@@ -1,0 +1,29 @@
+/* 按照代币任务组件的抽屉布局样式 */
+.button{
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  border-top: 1px solid #E1E4EA;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.button button {
+  flex: 1;
+}
+
+.container{
+  height: calc(100vh - 130px);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .ant-image-preview-img{
+  margin: auto;
+}
+
+:host ::ng-deep .ant-image-preview-img-wrapper::before{
+  width: 0 !important;
+  height: 0 !important;
+}

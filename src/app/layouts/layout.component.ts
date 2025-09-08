@@ -73,6 +73,12 @@ export class LayoutComponent implements OnInit {
         },
       ],
     },
+    {
+      label: '商品管理',
+      link: '/goods/management',
+      active: false,
+      icon: 'shopping',
+    },
   ];
 
   userInfo:any = {}

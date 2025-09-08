@@ -44,6 +44,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/admin/admin-management/admin-management.component').then(m => m.AdminManagementComponent)
       },
       {
+        path: 'goods/management',
+        loadComponent: () => import('./pages/goods/goods-management/goods-management.component').then(m => m.GoodsManagementComponent)
+      },
+      {
         path: 'change-password',
         component: ChangePasswordPageComponent,
         children: [

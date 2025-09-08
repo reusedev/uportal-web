@@ -1,0 +1,54 @@
+<div class="container">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label>商品封面</nz-form-label>
+        <nz-form-control>
+          <app-customer-file-list [props]="fileParams" formControlName="cover_pic"></app-customer-file-list>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>商品名称</nz-form-label>
+        <nz-form-control nzErrorTip="请输入商品名称">
+          <input nz-input formControlName="name" placeholder="请输入商品名称" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>商品标识</nz-form-label>
+        <nz-form-control [nzErrorTip]="codeErrorTpl">
+          <input nz-input formControlName="code" placeholder="请输入商品标识" />
+          <div class="mt-1 text-xs text-gray-500">商品标识应由字母、数字组成，用于唯一标识商品</div>
+          <ng-template #codeErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">请输入商品标识</ng-container>
+            <ng-container *ngIf="control.hasError('pattern')">商品标识格式不正确，应由字母、数字组成</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>商品价格</nz-form-label>
+        <nz-form-control nzErrorTip="请输入商品价格">
+          <nz-input-number formControlName="price" [nzMin]="0" [nzStep]="0.01" [nzPlaceHolder]="'请输入商品价格'"
+            [nzFormatter]="priceFormatter" [nzParser]="priceParser" class="w-full"></nz-input-number>
+          <div class="text-gray-400 mt-1 text-xs">请输入商品的销售价格</div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>商品描述</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="desc" placeholder="请输入商品描述"
+            [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+          <div class="text-gray-400 mt-1 text-xs">描述商品的功能特点、使用说明等信息</div>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-spin>
+</div>
+
+<div class="button">
+  <button [disabled]="loading" (click)="close()" nz-button type="reset" nzType="default" nzSize="default">取消</button>
+  <button [disabled]="loading" (click)="submit()" nz-button nzType="primary" nzSize="default">提交</button>
+</div>

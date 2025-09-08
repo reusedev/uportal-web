@@ -1,0 +1,186 @@
+<!-- goods-management.component.html -->
+<div class="flex justify-between items-center py-4 border-b border-gray-100">
+  <div class="flex gap-4">
+    <div
+      class="w-10 h-10 flex justify-center items-center rounded-full border border-[#EBEBEB] bg-white shadow-[0_1px_2px_0_rgba(10,13,20,0.03)]">
+      <nz-icon class="text-[16px]" nzType="shopping" nzTheme="outline" />
+    </div>
+    <div class="flex flex-col gap-0">
+      <div class="text-lg font-semibold text-[#0A0D14]">商品管理</div>
+      <div class="text-xs text-[#6B7280]">管理商品信息和商品状态</div>
+    </div>
+  </div>
+
+  <div class="flex gap-2">
+    <div class="flex items-center bg-white rounded-md border border-gray-200 px-3 max-w-xs">
+      <nz-icon nzType="search" class="text-gray-400 mr-2"></nz-icon>
+      <input nz-input [(ngModel)]="searchKeyword" placeholder="搜索商品名称、标识或描述" class="border-0 px-0 py-0 text-sm"
+        nzBorderless />
+      <button *ngIf="searchKeyword" nz-button nzType="text" nzSize="small"
+        class="ml-1 flex items-center text-gray-400 hover:text-gray-600" (click)="searchKeyword = ''">
+        <nz-icon nzType="close-circle" nzTheme="fill"></nz-icon>
+      </button>
+    </div>
+
+    <nz-button-group>
+      <button nz-button [nzType]="viewMode === 'card' ? 'primary' : 'default'" class="view-mode-btn"
+        (click)="viewMode = 'card'">
+        <nz-icon nzType="appstore" nzTheme="outline"></nz-icon>
+      </button>
+      <button nz-button [nzType]="viewMode === 'table' ? 'primary' : 'default'" class="view-mode-btn"
+        (click)="viewMode = 'table'">
+        <nz-icon nzType="bars" nzTheme="outline"></nz-icon>
+      </button>
+    </nz-button-group>
+
+    <button nz-button nzType="primary" (click)="addGoods()">
+      <nz-icon nzType="plus" nzTheme="outline" />
+      新建商品
+    </button>
+  </div>
+</div>
+
+<!-- 商品列表 -->
+<div class="py-6">
+  <nz-spin [nzSpinning]="loading">
+    <!-- 卡片视图模式 -->
+    <div *ngIf="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+
+      <!-- 商品卡片 -->
+      @for (goods of filteredGoods; track $index) {
+      <nz-ribbon [nzText]="goods.status === 1 ? '启用' : '禁用'" [nzColor]="goods.status === 1 ? 'green' :'red'">
+        <div
+          class=" bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col">
+          <!-- 卡片头部 -->
+          <div class="px-5 h-[54px] border-b border-gray-100 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+              @if (goods.cover_pic) {
+              <img class="w-8 h-8 rounded" [src]="goods.cover_pic.url" alt="">
+              } @else {
+              <nz-icon nzType="gift" nzTheme="twotone" class="text-lg" [nzTwotoneColor]="'#52c41a'"></nz-icon>
+              }
+              <span class="text-base font-medium">{{ goods.name }}</span>
+            </div>
+          </div>
+
+          <!-- 卡片内容 -->
+          <div class="px-5 py-4 flex-grow">
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              <div class="flex items-center">
+                <nz-icon nzType="dollar-circle" nzTheme="outline" class="mr-1 text-green-500"></nz-icon>
+                <span class="text-gray-700">价格: <span class="font-semibold">¥{{ goods.price }}</span></span>
+              </div>
+
+              <div class="flex items-center">
+                <nz-icon nzType="barcode" nzTheme="outline" class="mr-1 text-blue-500"></nz-icon>
+                <span class="text-gray-700">标识: <span class="font-semibold">{{ goods.code }}</span></span>
+              </div>
+            </div>
+
+            <div class="mt-3 text-xs text-gray-500">
+              <p nz-tooltip [nzTooltipTitle]="goods.desc" class="text-gray-600 line-clamp-2 overflow-hidden">{{
+                goods.desc || '暂无描述' }}</p>
+            </div>
+          </div>
+
+          <!-- 卡片底部 -->
+          <div class="px-5 py-3 bg-gray-50 flex justify-between border-t border-gray-100">
+            <button (click)="editGoods(goods)" nz-button nzType="text"
+              class="text-blue-500 hover:text-blue-600 flex items-center">
+              <nz-icon nzType="edit" nzTheme="outline" class="mr-1"></nz-icon>
+              <span>编辑</span>
+            </button>
+
+            <div class="flex gap-2">
+              <button nz-button nz-popconfirm [nzPopconfirmTitle]="goods.status === 1 ? '确定要禁用此商品吗?' : '确定要启用此商品吗?'"
+                (nzOnConfirm)="toggleGoodsStatus(goods)" class="flex items-center"
+                [ngClass]="goods.status === 1 ? 'text-red-500 hover:text-red-600' : 'text-green-500 hover:text-green-600'"
+                nzType="text">
+                <nz-icon [nzType]="goods.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline" class="mr-1"></nz-icon>
+                <span>{{ goods.status === 1 ? '禁用' : '启用' }}</span>
+              </button>
+
+              <button nz-button nz-popconfirm nzPopconfirmTitle="确定要删除此商品吗？删除后无法恢复"
+                (nzOnConfirm)="deleteGoods(goods)" class="flex items-center text-red-500 hover:text-red-600"
+                nzType="text">
+                <nz-icon nzType="delete" nzTheme="outline" class="mr-1"></nz-icon>
+                <span>删除</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nz-ribbon>
+      }
+
+      <!-- 无数据时显示 -->
+      <div *ngIf="filteredGoods.length === 0" class="col-span-full">
+        <nz-empty nzDescription="暂无商品数据" [nzNotFoundContent]="emptyTpl">
+          <ng-template #emptyTpl>
+            <span>{{ searchKeyword ? '没有找到匹配的商品' : '暂无商品数据，点击"新建商品"按钮创建' }}</span>
+          </ng-template>
+        </nz-empty>
+      </div>
+    </div>
+
+    <!-- 表格视图模式 -->
+    <div *ngIf="viewMode === 'table'" class="overflow-hidden bg-white rounded-lg border border-gray-200 shadow-sm">
+      <nz-table #basicTable [nzData]="filteredGoods" [nzLoading]="loading" [nzShowPagination]="true" [nzPageSize]="10"
+        class="w-full">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>商品信息</th>
+            <th>商品标识</th>
+            <th>价格</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let goods of basicTable.data">
+            <td>{{ goods.id }}</td>
+            <td>
+              <div class="flex items-center">
+                @if (goods.cover_pic) {
+                <img class="w-8 h-8 rounded mr-2" [src]="goods.cover_pic.url" alt="">
+                } @else {
+                <nz-icon nzType="gift" nzTheme="twotone" class="mr-2 text-lg" [nzTwotoneColor]="'#52c41a'"></nz-icon>
+                }
+                <div>
+                  <div class="font-medium">{{ goods.name }}</div>
+                  <div class="text-xs text-gray-500 mt-1">{{ goods.desc || '暂无描述' }}</div>
+                </div>
+              </div>
+            </td>
+            <td><nz-tag [nzColor]="'cyan'">{{ goods.code }}</nz-tag></td>
+            <td class="font-semibold text-green-600">¥{{ goods.price }}</td>
+            <td>
+              <nz-tag [nzColor]="goods.status === 1 ? 'success' : 'error'">
+                {{ goods.status === 1 ? '启用' : '禁用' }}
+              </nz-tag>
+            </td>
+            <td nzRight>
+              <div class="flex gap-2">
+                <button nz-button nzType="primary" nzSize="small" (click)="editGoods(goods)">
+                  <nz-icon nzType="edit" nzTheme="outline"></nz-icon>
+                  编辑
+                </button>
+                <button nz-button nzType="default" [ngClass]="goods.status === 1 ? 'text-red-500' : 'text-green-500'"
+                  nzSize="small" nz-popconfirm [nzPopconfirmTitle]="goods.status === 1 ? '确定要禁用此商品吗?' : '确定要启用此商品吗?'"
+                  (nzOnConfirm)="toggleGoodsStatus(goods)">
+                  <nz-icon [nzType]="goods.status === 1 ? 'stop' : 'play-circle'" nzTheme="outline"></nz-icon>
+                  {{ goods.status === 1 ? '禁用' : '启用' }}
+                </button>
+                <button nz-button nzType="default" nzDanger nzSize="small" nz-popconfirm 
+                  nzPopconfirmTitle="确定要删除此商品吗？删除后无法恢复" (nzOnConfirm)="deleteGoods(goods)">
+                  <nz-icon nzType="delete" nzTheme="outline"></nz-icon>
+                  删除
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-spin>
+</div>

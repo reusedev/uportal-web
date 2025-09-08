@@ -99,3 +99,17 @@ interface RechargeOrder {
   created_at: string;
   paid_at: string;
 }
+
+// 商品数据接口
+interface Goods {
+  id: string;
+  name: string;
+  code: string;
+  price: number;
+  status: number; // 0: 禁用, 1: 启用
+  desc?: string;
+  cover_pic?: {
+    id: string;
+    url: string;
+  };
+}
