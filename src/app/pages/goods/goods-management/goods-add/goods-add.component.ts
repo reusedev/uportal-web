@@ -47,7 +47,7 @@ export class GoodsAddComponent implements OnInit {
       this.validateForm = this.fb.group({
         cover_pic: [this.goods.cover_pic],
         name: [this.goods.name, [Validators.required]],
-        code: [this.goods.code, [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]],
+        code: [this.goods.code, [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]],
         price: [this.goods.price, [Validators.required, Validators.min(0)]],
         desc: [this.goods.desc],
       });
@@ -56,7 +56,7 @@ export class GoodsAddComponent implements OnInit {
       this.validateForm = this.fb.group({
         cover_pic: [null],
         name: [null, [Validators.required]],
-        code: [null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]],
+        code: [null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]],
         price: [null, [Validators.required, Validators.min(0)]],
         desc: [null],
       });

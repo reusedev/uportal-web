@@ -19,7 +19,7 @@
         <nz-form-label nzRequired>商品标识</nz-form-label>
         <nz-form-control [nzErrorTip]="codeErrorTpl">
           <input nz-input formControlName="code" placeholder="请输入商品标识" />
-          <div class="mt-1 text-xs text-gray-500">商品标识应由字母、数字组成，用于唯一标识商品</div>
+          <div class="mt-1 text-xs text-gray-500">商品标识应由字母、数字、下划线组成，用于唯一标识商品</div>
           <ng-template #codeErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">请输入商品标识</ng-container>
             <ng-container *ngIf="control.hasError('pattern')">商品标识格式不正确，应由字母、数字组成</ng-container>
