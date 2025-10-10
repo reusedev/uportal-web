@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { PublicModule } from '../../../../public.module';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzDrawerRef } from 'ng-zorro-antd/drawer';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -48,7 +48,11 @@ export class GoodsAddComponent implements OnInit {
         cover_pic: [this.goods.cover_pic],
         name: [this.goods.name, [Validators.required]],
         code: [this.goods.code, [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]],
-        price: [this.goods.price, [Validators.required, Validators.min(0)]],
+        price_list: this.fb.array(
+          this.goods.price_list && this.goods.price_list.length > 0
+            ? this.goods.price_list.map(item => this.createPriceItem(item.price, item.price_text))
+            : [this.createPriceItem()]
+        ),
         desc: [this.goods.desc],
       });
     } else {
@@ -57,9 +61,36 @@ export class GoodsAddComponent implements OnInit {
         cover_pic: [null],
         name: [null, [Validators.required]],
         code: [null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]],
-        price: [null, [Validators.required, Validators.min(0)]],
+        price_list: this.fb.array([this.createPriceItem()]),
         desc: [null],
       });
+    }
+  }
+
+  // 创建价格项表单组
+  createPriceItem(price: number | null = null, priceText: string | null = null): FormGroup {
+    return this.fb.group({
+      price: [price, [Validators.required, Validators.min(0)]],
+      price_text: [priceText, [Validators.required]],
+    });
+  }
+
+  // 获取价格列表 FormArray
+  get priceList(): FormArray {
+    return this.validateForm.get('price_list') as FormArray;
+  }
+
+  // 添加价格项
+  addPriceItem(): void {
+    this.priceList.push(this.createPriceItem());
+  }
+
+  // 删除价格项
+  removePriceItem(index: number): void {
+    if (this.priceList.length > 1) {
+      this.priceList.removeAt(index);
+    } else {
+      this.message.warning('至少保留一个价格项');
     }
   }
 

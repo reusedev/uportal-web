@@ -68,7 +68,7 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <div class="flex items-center">
                 <nz-icon nzType="dollar-circle" nzTheme="outline" class="mr-1 text-green-500"></nz-icon>
-                <span class="text-gray-700">价格: <span class="font-semibold">¥{{ goods.price }}</span></span>
+                <span class="text-gray-700">价格选项: <span class="font-semibold">{{ goods.price_list?.length || 0 }} 个</span></span>
               </div>
 
               <div class="flex items-center">
@@ -131,7 +131,7 @@
             <th>ID</th>
             <th>商品信息</th>
             <th>商品标识</th>
-            <th>价格</th>
+            <th>价格选项</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -153,7 +153,9 @@
               </div>
             </td>
             <td><nz-tag [nzColor]="'cyan'">{{ goods.code }}</nz-tag></td>
-            <td class="font-semibold text-green-600">¥{{ goods.price }}</td>
+            <td>
+              <nz-tag [nzColor]="'green'">{{ goods.price_list?.length || 0 }} 个价格</nz-tag>
+            </td>
             <td>
               <nz-tag [nzColor]="goods.status === 1 ? 'success' : 'error'">
                 {{ goods.status === 1 ? '启用' : '禁用' }}

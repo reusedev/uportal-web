@@ -8,16 +8,16 @@ interface TokenTask {
   interval_seconds: number;
   repeatable: number; // 0: 不可重复, 1: 可重复
   status: number; // 0: 禁用, 1: 启用
-  valid_from:string;
-  valid_to:string;
+  valid_from: string;
+  valid_to: string;
   task_key: string;
-  logo:{
-    id:string;
-    url:string;
-  },
-  action:string;
-  params:string
-  action_text:string;
+  logo: {
+    id: string;
+    url: string;
+  };
+  action: string;
+  params: string;
+  action_text: string;
 }
 
 // 代币消费特性数据接口
@@ -105,7 +105,11 @@ interface Goods {
   id: string;
   name: string;
   code: string;
-  price: number;
+  price?: number; // 废弃字段，保留用于兼容旧数据
+  price_list?: {
+    price: number;
+    price_text: string;
+  }[];
   status: number; // 0: 禁用, 1: 启用
   desc?: string;
   cover_pic?: {

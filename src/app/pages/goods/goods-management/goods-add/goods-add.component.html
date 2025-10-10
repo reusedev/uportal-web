@@ -28,11 +28,61 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired>商品价格</nz-form-label>
-        <nz-form-control nzErrorTip="请输入商品价格">
-          <nz-input-number formControlName="price" [nzMin]="0" [nzStep]="0.01" [nzPlaceHolder]="'请输入商品价格'"
-            [nzFormatter]="priceFormatter" [nzParser]="priceParser" class="w-full"></nz-input-number>
-          <div class="text-gray-400 mt-1 text-xs">请输入商品的销售价格</div>
+        <nz-form-label nzRequired>商品价格列表</nz-form-label>
+        <nz-form-control>
+          <div formArrayName="price_list" class="space-y-3">
+            @for (priceItem of priceList.controls; track $index) {
+              <div [formGroupName]="$index" class="flex items-start gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="flex-1 space-y-2">
+                  <div>
+                    <label class="text-xs text-gray-600 mb-1 block">价格</label>
+                    <nz-input-number
+                      formControlName="price"
+                      [nzMin]="0"
+                      [nzStep]="0.01"
+                      [nzPlaceHolder]="'请输入价格'"
+                      [nzFormatter]="priceFormatter"
+                      [nzParser]="priceParser"
+                      class="w-full">
+                    </nz-input-number>
+                    @if (priceItem.get('price')?.invalid && priceItem.get('price')?.touched) {
+                      <div class="text-xs text-red-500 mt-1">请输入有效价格</div>
+                    }
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-600 mb-1 block">价格文案</label>
+                    <input
+                      nz-input
+                      formControlName="price_text"
+                      placeholder="例如：默认方案、高清大图等"
+                      class="w-full"
+                    />
+                    @if (priceItem.get('price_text')?.invalid && priceItem.get('price_text')?.touched) {
+                      <div class="text-xs text-red-500 mt-1">请输入价格文案</div>
+                    }
+                  </div>
+                </div>
+                <button
+                  nz-button
+                  nzType="text"
+                  nzDanger
+                  (click)="removePriceItem($index)"
+                  class="mt-6"
+                  [disabled]="priceList.length === 1">
+                  <nz-icon nzType="delete" nzTheme="outline"></nz-icon>
+                </button>
+              </div>
+            }
+          </div>
+          <button
+            nz-button
+            nzType="dashed"
+            (click)="addPriceItem()"
+            class="w-full mt-3">
+            <nz-icon nzType="plus" nzTheme="outline"></nz-icon>
+            添加价格项
+          </button>
+          <div class="text-gray-400 mt-2 text-xs">可以添加多个价格选项，每个价格对应不同的时长或规格</div>
         </nz-form-control>
       </nz-form-item>
 
