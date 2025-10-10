@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { PublicModule } from '../../../../public.module';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzDrawerRef } from 'ng-zorro-antd/drawer';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -48,11 +48,6 @@ export class GoodsAddComponent implements OnInit {
         cover_pic: [this.goods.cover_pic],
         name: [this.goods.name, [Validators.required]],
         code: [this.goods.code, [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]],
-        price_list: this.fb.array(
-          this.goods.price_list && this.goods.price_list.length > 0
-            ? this.goods.price_list.map(item => this.createPriceItem(item.price, item.price_text))
-            : [this.createPriceItem()]
-        ),
         desc: [this.goods.desc],
       });
     } else {
@@ -61,42 +56,10 @@ export class GoodsAddComponent implements OnInit {
         cover_pic: [null],
         name: [null, [Validators.required]],
         code: [null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]],
-        price_list: this.fb.array([this.createPriceItem()]),
         desc: [null],
       });
     }
   }
-
-  // 创建价格项表单组
-  createPriceItem(price: number | null = null, priceText: string | null = null): FormGroup {
-    return this.fb.group({
-      price: [price, [Validators.required, Validators.min(0)]],
-      price_text: [priceText, [Validators.required]],
-    });
-  }
-
-  // 获取价格列表 FormArray
-  get priceList(): FormArray {
-    return this.validateForm.get('price_list') as FormArray;
-  }
-
-  // 添加价格项
-  addPriceItem(): void {
-    this.priceList.push(this.createPriceItem());
-  }
-
-  // 删除价格项
-  removePriceItem(index: number): void {
-    if (this.priceList.length > 1) {
-      this.priceList.removeAt(index);
-    } else {
-      this.message.warning('至少保留一个价格项');
-    }
-  }
-
-  // 价格格式化显示
-  priceFormatter = (value: number): string => `¥ ${value}`;
-  priceParser = (value: string): number => parseFloat(value.replace('¥ ', '')) || 0;
 
   close() {
     this.drawerRef.close(false);
@@ -106,13 +69,14 @@ export class GoodsAddComponent implements OnInit {
     if (this.validateForm.valid) {
       this.loading = true;
 
-      const formData = {
-        ...this.validateForm.value,
-      };
-
       if (this.goods) {
-        // 编辑商品
-        formData['id'] = this.goods.id;
+        // 编辑商品 - 保留原有的 price_list
+        const formData = {
+          ...this.validateForm.value,
+          id: this.goods.id,
+          price_list: this.goods.price_list || [],
+        };
+
         this.http.post('/admin/goods/edit', formData).subscribe({
           next: () => {
             this.drawerRef.close(true);
@@ -126,7 +90,12 @@ export class GoodsAddComponent implements OnInit {
           },
         });
       } else {
-        // 新建商品
+        // 新建商品 - 传空数组
+        const formData = {
+          ...this.validateForm.value,
+          price_list: [],
+        };
+
         this.http.post('/admin/goods/add', formData).subscribe({
           next: () => {
             this.drawerRef.close(true);

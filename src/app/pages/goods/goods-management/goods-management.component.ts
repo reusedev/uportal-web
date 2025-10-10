@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PublicModule } from '../../../public.module';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { HttpClient } from '@angular/common/http';
@@ -18,6 +18,7 @@ export class GoodsManagementComponent implements OnInit {
   message = inject(NzMessageService);
   http = inject(HttpClient);
   drawer = inject(NzDrawerService);
+  router = inject(Router);
 
   // 商品列表
   goodsList: Goods[] = [];
@@ -55,7 +56,7 @@ export class GoodsManagementComponent implements OnInit {
       id: goods.id,
       status: goods.status === 1 ? 0 : 1, // 切换状态
     };
-    
+
     this.http.post('/admin/goods/operate', params).subscribe({
       next: () => {
         goods.status = goods.status === 1 ? 0 : 1; // 更新本地状态
@@ -118,6 +119,11 @@ export class GoodsManagementComponent implements OnInit {
         this.loadGoodsList(); // 重新加载商品列表
       }
     });
+  }
+
+  // 管理商品价格
+  managePrices(goods: Goods) {
+    this.router.navigate(['/goods/price', goods.code]);
   }
 
   // 筛选商品

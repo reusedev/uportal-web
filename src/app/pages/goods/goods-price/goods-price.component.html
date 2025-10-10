@@ -1,0 +1,112 @@
+<div class="min-h-screen bg-white">
+  <nz-spin [nzSpinning]="loading">
+    @if (goods) {
+    <!-- 页面头部 -->
+    <div class="bg-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <button nz-button nzType="text" (click)="goBack()" class="flex items-center">
+              <span class="ri-arrow-left-line text-xl"></span>
+            </button>
+            <div class="flex items-center gap-3">
+              @if (goods.cover_pic) {
+              <img class="w-12 h-12 rounded-lg" [src]="goods.cover_pic.url" alt="">
+              } @else {
+              <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                <nz-icon nzType="gift" nzTheme="twotone" class="text-xl" [nzTwotoneColor]="'#52c41a'"></nz-icon>
+              </div>
+              }
+              <div>
+                <h1 class="text-xl font-semibold text-gray-900">{{ goods.name }} - 价格管理</h1>
+                <div class="text-sm text-gray-500 mt-1">商品标识: {{ goods.code }}</div>
+              </div>
+            </div>
+          </div>
+          <button nz-button nzType="primary" (click)="addPrices()">
+            <span class="ri-add-line mr-1"></span>
+            新增价格
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 价格列表 -->
+    <div class="max-w-7xl mx-auto px-6 py-6">
+      @if (priceList.length === 0) {
+      <!-- 空状态 -->
+      <div class="text-center py-16">
+        <nz-empty nzNotFoundContent="暂无价格数据">
+          <ng-template #nzNotFoundContent>
+            <div class="text-gray-500 mb-4">
+              <span class="ri-price-tag-3-line text-5xl"></span>
+            </div>
+            <p class="text-gray-600 mb-6">暂无价格数据，点击右上角按钮添加价格</p>
+          </ng-template>
+        </nz-empty>
+      </div>
+      } @else {
+      <!-- 价格卡片网格 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of priceList; track $index) {
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+          <!-- 卡片头部 -->
+          <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="ri-price-tag-3-fill text-green-500 text-lg"></span>
+              <span class="text-sm font-medium text-gray-700">价格 {{ $index + 1 }}</span>
+            </div>
+            <button
+              nz-button
+              nzType="text"
+              nzSize="small"
+              (click)="editPrice(item, $index)">
+              <span class="ri-edit-line mr-1"></span>
+              编辑
+            </button>
+          </div>
+
+          <!-- 卡片内容 - 只读展示 -->
+          <div class="px-6 py-5 space-y-4">
+            <!-- 价格显示 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-500 mb-2">
+                <span class="ri-money-dollar-circle-line mr-1"></span>
+                价格
+              </label>
+              <div class="text-2xl font-semibold text-green-600">¥{{ item.price }}</div>
+            </div>
+
+            <!-- 价格文案显示 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-500 mb-2">
+                <span class="ri-text mr-1"></span>
+                价格文案
+              </label>
+              <div class="text-base text-gray-900">{{ item.price_text }}</div>
+            </div>
+
+            <!-- 状态开关 -->
+            <div class="pt-2 border-t border-gray-100">
+              <div class="flex items-center justify-between">
+                <label class="text-sm font-medium text-gray-700">
+                  <span class="ri-toggle-line mr-1"></span>
+                  状态
+                </label>
+                <nz-switch
+                  [ngModel]="(item.status ?? 1) === 1"
+                  (ngModelChange)="onStatusChange(item, $event)"
+                  nzCheckedChildren="启用"
+                  nzUnCheckedChildren="禁用">
+                </nz-switch>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+    }
+  </nz-spin>
+</div>

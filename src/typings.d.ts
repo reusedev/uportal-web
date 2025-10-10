@@ -107,8 +107,10 @@ interface Goods {
   code: string;
   price?: number; // 废弃字段，保留用于兼容旧数据
   price_list?: {
+    id?: number; // 价格项ID，编辑时必须，新增时不需要
     price: number;
     price_text: string;
+    status?: number; // 价格项状态: 0: 禁用, 1: 启用
   }[];
   status: number; // 0: 禁用, 1: 启用
   desc?: string;

@@ -68,7 +68,17 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <div class="flex items-center">
                 <nz-icon nzType="dollar-circle" nzTheme="outline" class="mr-1 text-green-500"></nz-icon>
-                <span class="text-gray-700">价格选项: <span class="font-semibold">{{ goods.price_list?.length || 0 }} 个</span></span>
+                <span class="text-gray-700">价格选项:
+                  @if (goods.price_list && goods.price_list.length > 0) {
+                    <a (click)="managePrices(goods)" class="font-semibold text-blue-500 hover:text-blue-600 cursor-pointer">
+                      {{ goods.price_list.length }} 个
+                    </a>
+                  } @else {
+                    <a (click)="managePrices(goods)" class="inline-flex items-center text-orange-500 hover:text-orange-600 cursor-pointer" title="添加价格">
+                      <span class="ri-add-circle-fill text-lg"></span>
+                    </a>
+                  }
+                </span>
               </div>
 
               <div class="flex items-center">
@@ -154,7 +164,15 @@
             </td>
             <td><nz-tag [nzColor]="'cyan'">{{ goods.code }}</nz-tag></td>
             <td>
-              <nz-tag [nzColor]="'green'">{{ goods.price_list?.length || 0 }} 个价格</nz-tag>
+              @if (goods.price_list && goods.price_list.length > 0) {
+                <a (click)="managePrices(goods)" class="text-blue-500 hover:text-blue-600 cursor-pointer">
+                  <nz-tag [nzColor]="'green'">{{ goods.price_list.length }} 个价格</nz-tag>
+                </a>
+              } @else {
+                <a (click)="managePrices(goods)" class="inline-flex items-center text-orange-500 hover:text-orange-600 cursor-pointer" title="添加价格">
+                  <span class="ri-add-circle-fill text-xl"></span>
+                </a>
+              }
             </td>
             <td>
               <nz-tag [nzColor]="goods.status === 1 ? 'success' : 'error'">

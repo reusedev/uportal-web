@@ -48,6 +48,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/goods/goods-management/goods-management.component').then(m => m.GoodsManagementComponent)
       },
       {
+        path: 'goods/price/:code',
+        loadComponent: () => import('./pages/goods/goods-price/goods-price.component').then(m => m.GoodsPriceComponent)
+      },
+      {
         path: 'change-password',
         component: ChangePasswordPageComponent,
         children: [

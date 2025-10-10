@@ -1,0 +1,40 @@
+<div class="container">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="priceForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>价格</nz-form-label>
+        <nz-form-control nzErrorTip="请输入有效价格">
+          <nz-input-number
+            formControlName="price"
+            [nzMin]="0"
+            [nzStep]="0.01"
+            [nzPlaceHolder]="'请输入价格'"
+            [nzFormatter]="priceFormatter"
+            [nzParser]="priceParser"
+            class="w-full"
+            nzSize="large">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>价格文案</nz-form-label>
+        <nz-form-control nzErrorTip="请输入价格文案">
+          <input
+            nz-input
+            formControlName="price_text"
+            placeholder="例如：默认方案、高清大图等"
+            nzSize="large"
+          />
+          <div class="text-gray-400 mt-1 text-xs">描述这个价格对应的规格或时长</div>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-spin>
+</div>
+
+<div class="button">
+  <button [disabled]="loading" (click)="close()" nz-button nzType="default" nzSize="default">取消</button>
+  <button [disabled]="loading" (click)="save()" nz-button nzType="primary" nzSize="default">保存</button>
+</div>
+
