@@ -3,20 +3,16 @@
     @if (goods) {
     <!-- 页面头部 -->
     <div class="bg-white border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="p-6">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
             <button nz-button nzType="text" (click)="goBack()" class="flex items-center">
               <span class="ri-arrow-left-line text-xl"></span>
             </button>
             <div class="flex items-center gap-3">
-              @if (goods.cover_pic) {
-              <img class="w-12 h-12 rounded-lg" [src]="goods.cover_pic.url" alt="">
-              } @else {
-              <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center">
                 <nz-icon nzType="gift" nzTheme="twotone" class="text-xl" [nzTwotoneColor]="'#52c41a'"></nz-icon>
               </div>
-              }
               <div>
                 <h1 class="text-xl font-semibold text-gray-900">{{ goods.name }} - 价格管理</h1>
                 <div class="text-sm text-gray-500 mt-1">商品标识: {{ goods.code }}</div>
@@ -32,7 +28,7 @@
     </div>
 
     <!-- 价格列表 -->
-    <div class="max-w-7xl mx-auto px-6 py-6">
+    <div class="py-6">
       @if (priceList.length === 0) {
       <!-- 空状态 -->
       <div class="text-center py-16">
