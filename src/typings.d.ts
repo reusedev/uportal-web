@@ -33,15 +33,15 @@ interface TokenFeature {
 
 // 用户数据接口
 interface User {
-  id: string;
-  phone: string;
-  email: string;
+  id: number;
   nickname: string;
   avatar: string;
   status: number; // 0: 禁用, 1: 启用
   token_balance: number;
   created_at: string;
   last_login_at: string;
+  inviter_id: string;
+  source_type: string;
   language?: string;
   updated_at?: string;
   auth_providers?: string[];

@@ -32,20 +32,18 @@
           <nz-avatar [nzSize]="64" [nzSrc]="userDetail?.avatar || '/assets/avatar.png'" class="mr-4"></nz-avatar>
           <div>
             <div class="flex items-center mb-1">
-              <h2 class="text-xl font-semibold text-gray-800 m-0">{{ userDetail?.nickname || '加载中...' }}</h2>
+              <h2 
+                class="text-xl font-semibold m-0"
+                [class.text-gray-800]="userDetail?.nickname"
+                [class.text-gray-400]="!userDetail?.nickname"
+              >
+                <span *ngIf="!userDetail">加载中...</span>
+                <span *ngIf="userDetail && !userDetail.nickname">暂无昵称</span>
+                <span *ngIf="userDetail && userDetail.nickname">{{ userDetail.nickname }}</span>
+              </h2>
               <nz-tag class="ml-3" [nzColor]="userDetail?.status === 1 ? 'success' : 'error'">
                 {{ userDetail?.status === 1 ? '启用' : '禁用' }}
               </nz-tag>
-            </div>
-            <div class="flex gap-4 text-gray-500">
-              <span class="flex items-center">
-                <nz-icon nzType="phone" class="mr-1"></nz-icon>
-                {{ userDetail?.phone || '-' }}
-              </span>
-              <span class="flex items-center">
-                <nz-icon nzType="mail" class="mr-1"></nz-icon>
-                {{ userDetail?.email || '-' }}
-              </span>
             </div>
           </div>
         </div>

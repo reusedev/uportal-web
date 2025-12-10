@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PublicModule } from '../../../public.module';
@@ -8,6 +8,12 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormsModule } from '@angular/forms';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
+// 字典项接口
+interface DictItem {
+  id: string;
+  name: string;
+}
+
 @Component({
   standalone: true,
   selector: 'app-user-management',
@@ -15,7 +21,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
   styleUrls: ['./user-management.component.css'],
   imports: [CommonModule, RouterModule, PublicModule, FormsModule],
 })
-export class UserManagementComponent {
+export class UserManagementComponent implements OnInit {
   message = inject(NzMessageService);
   http = inject(HttpClient);
   router = inject(Router);
@@ -32,34 +38,67 @@ export class UserManagementComponent {
   pageIndex = 1;
   pageSize = 10;
   total = 0;
-  sort: any = null;
+  sort: string[] | null = null;
 
   // 筛选条件
   filters = {
     status: null as number | null,
-    phone: '',
+    user_id: '',
+    inviter_id: '',
+    source_type: null as string | null,
     nickname: '',
   };
+
+  // 来源类型选项
+  sourceTypeOptions: DictItem[] = [];
+
+  ngOnInit(): void {
+    this.loadSourceTypeDict();
+    this.loadUserList();
+  }
+
+  // 加载来源类型字典
+  loadSourceTypeDict(): void {
+    this.http
+      .post<{ code: number; message: string; data: DictItem[] }>(
+        '/admin/users/suorce_type',
+        {}
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.code === 0) {
+            this.sourceTypeOptions = res.data || [];
+          }
+        },
+        error: () => {
+          this.message.error('获取来源类型字典失败');
+        },
+      });
+  }
 
   // 加载用户列表
   loadUserList(): void {
     this.loading = true;
 
-    const params = {
+    const params: any = {
       page: this.pageIndex,
       limit: this.pageSize,
-      sort: this.sort,
+      user_id: this.filters.user_id || '',
+      inviter_id: this.filters.inviter_id || '',
+      source_type: this.filters.source_type || '',
     };
+
+    // 添加排序参数
+    if (this.sort) {
+      params.sort = this.sort;
+    }
 
     // 添加筛选条件
     if (this.filters.status !== null) {
-      Object.assign(params, { status: this.filters.status });
-    }
-    if (this.filters.phone) {
-      Object.assign(params, { phone: this.filters.phone });
+      params.status = this.filters.status;
     }
     if (this.filters.nickname) {
-      Object.assign(params, { nickname: this.filters.nickname });
+      params.nickname = this.filters.nickname;
     }
 
     this.http
@@ -70,8 +109,12 @@ export class UserManagementComponent {
       .subscribe({
         next: (res) => {
           this.loading = false;
-          this.userList = res.data || [];
-          this.total = res.count || 0;
+          if (res.code === 0) {
+            this.userList = res.data || [];
+            this.total = res.count || 0;
+          } else {
+            this.message.error('获取用户列表失败');
+          }
         },
         error: () => {
           this.message.error('获取用户列表失败');
@@ -112,9 +155,12 @@ export class UserManagementComponent {
   resetFilters(): void {
     this.filters = {
       status: null,
-      phone: '',
+      user_id: '',
+      inviter_id: '',
+      source_type: null,
       nickname: '',
     };
+    this.pageIndex = 1;
     this.loadUserList();
   }
 
@@ -137,7 +183,7 @@ export class UserManagementComponent {
     this.loadUserList();
   }
 
-  // 筛选用户
+  // 筛选用户（客户端搜索）
   get filteredUsers(): User[] {
     if (!this.searchKeyword) {
       return this.userList;
@@ -147,23 +193,28 @@ export class UserManagementComponent {
     return this.userList.filter(
       (user) =>
         user.nickname.toLowerCase().includes(keyword) ||
-        user.phone.toLowerCase().includes(keyword) ||
-        user.email.toLowerCase().includes(keyword)
+        user.id.toString().includes(keyword) ||
+        user.inviter_id.toLowerCase().includes(keyword)
     );
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
     const sortItems = params.sort.filter((item) => item.value);
     if (sortItems.length) {
-      const sort = [
+      this.sort = [
         sortItems[0].key,
         sortItems[0].value === 'ascend' ? 'asc' : 'desc',
       ];
-      this.sort = sort;
     } else {
       this.sort = null;
     }
 
     this.loadUserList();
+  }
+
+  // 获取来源类型名称
+  getSourceTypeName(sourceType: string): string {
+    const found = this.sourceTypeOptions.find((item) => item.id === sourceType);
+    return found ? found.name : sourceType || '-';
   }
 }

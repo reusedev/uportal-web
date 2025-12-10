@@ -17,7 +17,6 @@
 <div class="rounded-md my-6">
   <div class="flex flex-wrap gap-6 items-end">
     <div class="flex flex-col gap-1">
-      <!-- <span class="text-xs font-medium text-gray-500">用户状态</span> -->
       <nz-select nzAllowClear [(ngModel)]="filters.status" nzPlaceHolder="全部状态" class="w-32 rounded-[4px]">
         <nz-option [nzValue]="1" nzLabel="启用"></nz-option>
         <nz-option [nzValue]="0" nzLabel="禁用"></nz-option>
@@ -25,17 +24,35 @@
     </div>
 
     <div class="flex flex-col gap-1">
-      <!-- <span class="text-xs font-medium text-gray-500">手机号</span> -->
+      <nz-select
+        nzAllowClear
+        [(ngModel)]="filters.source_type"
+        nzPlaceHolder="全部来源"
+        class="w-32 rounded-[4px]"
+      >
+        <nz-option *ngFor="let option of sourceTypeOptions" [nzValue]="option.id" [nzLabel]="option.name"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="flex flex-col gap-1">
       <input
         nz-input
-        [(ngModel)]="filters.phone"
-        placeholder="请输入手机号"
-        class="w-48 rounded-[4px]"
+        [(ngModel)]="filters.user_id"
+        placeholder="请输入用户ID"
+        class="w-32 rounded-[4px]"
       />
     </div>
 
     <div class="flex flex-col gap-1">
-      <!-- <span class="text-xs font-medium text-gray-500">用户昵称</span> -->
+      <input
+        nz-input
+        [(ngModel)]="filters.inviter_id"
+        placeholder="请输入邀请人ID"
+        class="w-32 rounded-[4px]"
+      />
+    </div>
+
+    <div class="flex flex-col gap-1">
       <input
         nz-input
         [(ngModel)]="filters.nickname"
@@ -79,6 +96,8 @@
             <th>ID</th>
             <th>用户信息</th>
             <th nzColumnKey="token_balance" [nzSortFn]="true">代币余额</th>
+            <th>邀请人ID</th>
+            <th>来源类型</th>
             <th>注册时间</th>
             <th>最后登录</th>
             <th>状态</th>
@@ -92,18 +111,18 @@
               <div class="flex items-center">
                 <nz-avatar [nzSize]="32" [nzSrc]="user.avatar || '/assets/avatar.png'" class="mr-3"></nz-avatar>
                 <div>
-                  <div class="font-medium">{{ user.nickname }}</div>
-                  <!-- <div class="text-xs text-gray-500">
-                    <span class="mr-2">{{ user.phone }}</span>
+                  <div class="font-medium" [class.text-gray-400]="!user.nickname">
+                    {{ user.nickname || '暂无昵称' }}
                   </div>
-                  <div class="text-xs text-gray-500">
-                    <span>{{ user.email }}</span>
-                  </div> -->
                 </div>
               </div>
             </td>
             <td>
               <span class="text-blue-600 font-medium">{{ user.token_balance }}</span>
+            </td>
+            <td>{{ user.inviter_id || '-' }}</td>
+            <td>
+              <span class="text-gray-600">{{ getSourceTypeName(user.source_type) }}</span>
             </td>
             <td>{{ user.created_at | date:'yyyy-MM-dd' }}</td>
             <td>{{ user.last_login_at | date:'yyyy-MM-dd HH:mm' }}</td>
