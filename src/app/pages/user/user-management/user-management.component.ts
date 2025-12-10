@@ -100,7 +100,7 @@ export class UserManagementComponent implements OnInit {
     // 添加筛选条件
     params.status = this.filters.status !== null ? this.filters.status : null;
     params.nickname = this.filters.nickname && this.filters.nickname.trim() ? this.filters.nickname.trim() : null;
-    
+
     if (this.filters.created_at) {
       // 格式化为 YYYY-MM-DD
       const date = new Date(this.filters.created_at);
@@ -108,7 +108,7 @@ export class UserManagementComponent implements OnInit {
     } else {
       params.created_at = null;
     }
-    
+
     if (this.filters.last_login_at) {
       // 格式化为 YYYY-MM-DD
       const date = new Date(this.filters.last_login_at);
@@ -233,6 +233,6 @@ export class UserManagementComponent implements OnInit {
   // 获取来源类型名称
   getSourceTypeName(sourceType: string): string {
     const found = this.sourceTypeOptions.find((item) => item.id === sourceType);
-    return found ? found.name : sourceType || '-';
+    return found ? found.name : sourceType || '其他';
   }
 }
