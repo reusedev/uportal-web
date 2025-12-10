@@ -14,62 +14,100 @@
 </div>
 
 <!-- 筛选器 -->
-<div class="rounded-md my-6">
-  <div class="flex flex-wrap gap-6 items-end">
-    <div class="flex flex-col gap-1">
-      <nz-select nzAllowClear [(ngModel)]="filters.status" nzPlaceHolder="全部状态" class="w-32 rounded-[4px]">
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 my-6">
+  <div class="flex items-center gap-2 mb-4">
+    <nz-icon nzType="filter" nzTheme="outline" class="text-gray-500"></nz-icon>
+    <span class="text-sm font-medium text-gray-700">筛选条件</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- 第一行 -->
+    <div class="flex flex-col gap-2">
+      <label class="text-xs text-gray-500 font-medium">状态</label>
+      <nz-select nzAllowClear [(ngModel)]="filters.status" nzPlaceHolder="全部状态" class="w-full rounded-[4px]">
         <nz-option [nzValue]="1" nzLabel="启用"></nz-option>
         <nz-option [nzValue]="0" nzLabel="禁用"></nz-option>
       </nz-select>
     </div>
 
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col gap-2">
+      <label class="text-xs text-gray-500 font-medium">来源类型</label>
       <nz-select
         nzAllowClear
         [(ngModel)]="filters.source_type"
         nzPlaceHolder="全部来源"
-        class="w-32 rounded-[4px]"
+        class="w-full rounded-[4px]"
       >
         <nz-option *ngFor="let option of sourceTypeOptions" [nzValue]="option.id" [nzLabel]="option.name"></nz-option>
       </nz-select>
     </div>
 
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col gap-2">
+      <label class="text-xs text-gray-500 font-medium">用户ID</label>
       <input
         nz-input
         [(ngModel)]="filters.user_id"
         placeholder="请输入用户ID"
-        class="w-32 rounded-[4px]"
+        class="w-full rounded-[4px]"
       />
     </div>
 
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col gap-2">
+      <label class="text-xs text-gray-500 font-medium">邀请人ID</label>
       <input
         nz-input
         [(ngModel)]="filters.inviter_id"
         placeholder="请输入邀请人ID"
-        class="w-32 rounded-[4px]"
+        class="w-full rounded-[4px]"
       />
     </div>
 
-    <div class="flex flex-col gap-1">
+    <!-- 第二行 -->
+    <div class="flex flex-col gap-2">
+      <label class="text-xs text-gray-500 font-medium">用户昵称</label>
       <input
         nz-input
         [(ngModel)]="filters.nickname"
         placeholder="请输入用户昵称"
-        class="w-48 rounded-[4px]"
+        class="w-full rounded-[4px]"
       />
     </div>
 
-    <div class="flex gap-2">
-      <button nz-button nzType="primary" (click)="applyFilters()">
-        <nz-icon nzType="search" nzTheme="outline"></nz-icon>
-        查询
-      </button>
-      <button nz-button nzType="default" (click)="resetFilters()">
-        <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
-        重置
-      </button>
+    <div class="flex flex-col gap-2">
+      <label class="text-xs text-gray-500 font-medium">注册时间</label>
+      <nz-date-picker
+        nzAllowClear
+        [(ngModel)]="filters.created_at"
+        nzPlaceHolder="选择注册时间"
+        nzMode="date"
+        nzFormat="yyyy-MM-dd"
+        class="w-full rounded-[4px]"
+      ></nz-date-picker>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs text-gray-500 font-medium">最后登录时间</label>
+      <nz-date-picker
+        nzAllowClear
+        [(ngModel)]="filters.last_login_at"
+        nzPlaceHolder="选择最后登录时间"
+        nzMode="date"
+        nzFormat="yyyy-MM-dd"
+        class="w-full rounded-[4px]"
+      ></nz-date-picker>
+    </div>
+
+    <div class="flex flex-col gap-2 justify-end">
+      <div class="flex gap-2">
+        <button nz-button nzType="primary" (click)="applyFilters()" class="flex-1">
+          <nz-icon nzType="search" nzTheme="outline"></nz-icon>
+          查询
+        </button>
+        <button nz-button nzType="default" (click)="resetFilters()" class="flex-1">
+          <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
+          重置
+        </button>
+      </div>
     </div>
   </div>
 </div>

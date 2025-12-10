@@ -47,6 +47,8 @@ export class UserManagementComponent implements OnInit {
     inviter_id: '',
     source_type: null as string | null,
     nickname: '',
+    created_at: null as Date | null,
+    last_login_at: null as Date | null,
   };
 
   // 来源类型选项
@@ -83,22 +85,36 @@ export class UserManagementComponent implements OnInit {
     const params: any = {
       page: this.pageIndex,
       limit: this.pageSize,
-      user_id: this.filters.user_id || '',
-      inviter_id: this.filters.inviter_id || '',
-      source_type: this.filters.source_type || '',
+      user_id: this.filters.user_id && this.filters.user_id.trim() ? this.filters.user_id.trim() : null,
+      inviter_id: this.filters.inviter_id && this.filters.inviter_id.trim() ? this.filters.inviter_id.trim() : null,
+      source_type: this.filters.source_type || null,
     };
 
     // 添加排序参数
     if (this.sort) {
       params.sort = this.sort;
+    } else {
+      params.sort = null;
     }
 
     // 添加筛选条件
-    if (this.filters.status !== null) {
-      params.status = this.filters.status;
+    params.status = this.filters.status !== null ? this.filters.status : null;
+    params.nickname = this.filters.nickname && this.filters.nickname.trim() ? this.filters.nickname.trim() : null;
+    
+    if (this.filters.created_at) {
+      // 格式化为 YYYY-MM-DD
+      const date = new Date(this.filters.created_at);
+      params.created_at = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    } else {
+      params.created_at = null;
     }
-    if (this.filters.nickname) {
-      params.nickname = this.filters.nickname;
+    
+    if (this.filters.last_login_at) {
+      // 格式化为 YYYY-MM-DD
+      const date = new Date(this.filters.last_login_at);
+      params.last_login_at = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    } else {
+      params.last_login_at = null;
     }
 
     this.http
@@ -159,6 +175,8 @@ export class UserManagementComponent implements OnInit {
       inviter_id: '',
       source_type: null,
       nickname: '',
+      created_at: null,
+      last_login_at: null,
     };
     this.pageIndex = 1;
     this.loadUserList();
