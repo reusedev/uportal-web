@@ -110,7 +110,7 @@
 <!-- 用户列表 -->
 <div>
   <nz-spin [nzSpinning]="loading">
-    <div *ngIf="viewMode === 'table'" class="bg-white rounded-lg border border-gray-200 shadow-sm">
+    <div *ngIf="viewMode === 'table'" class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-x-auto">
       <nz-table
         #basicTable
         [nzData]="filteredUsers"
@@ -122,26 +122,26 @@
         (nzPageIndexChange)="onPageIndexChange($event)"
         (nzPageSizeChange)="onPageSizeChange($event)"
         (nzQueryParams)="onQueryParamsChange($event)"
-        [nzScroll]="{ x: '900px' }"
-        class="w-full"
+        [nzScroll]="{ x: '1200px' }"
+        class="w-full min-w-[1200px]"
       >
         <thead>
           <tr>
-            <th>ID</th>
-            <th>用户信息</th>
-            <th nzColumnKey="token_balance" [nzSortFn]="true">代币余额</th>
-            <th>邀请人ID</th>
-            <th>来源类型</th>
-            <th>注册时间</th>
-            <th>最后登录</th>
-            <th>状态</th>
-            <th nzWidth="100px" nzRight>操作</th>
+            <th nzWidth="80px">ID</th>
+            <th nzWidth="200px">用户信息</th>
+            <th nzColumnKey="token_balance" [nzSortFn]="true" nzWidth="120px">代币余额</th>
+            <th nzWidth="120px">邀请人ID</th>
+            <th nzWidth="120px">来源类型</th>
+            <th nzWidth="180px">注册时间</th>
+            <th nzWidth="180px">最后登录</th>
+            <th nzWidth="100px">状态</th>
+            <th nzWidth="120px" nzRight>操作</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of basicTable.data">
-            <td class="min-w-[60px]">{{ user.id }}</td>
-            <td class="min-w-[180px]">
+            <td>{{ user.id }}</td>
+            <td>
               <div class="flex items-center">
                 <nz-avatar [nzSize]="32" [nzSrc]="user.avatar || '/assets/avatar.png'" class="mr-3 flex-shrink-0"></nz-avatar>
                 <div class="min-w-0 flex-1">
@@ -151,22 +151,22 @@
                 </div>
               </div>
             </td>
-            <td class="min-w-[100px]">
+            <td>
               <span class="text-blue-600 font-medium">{{ user.token_balance }}</span>
             </td>
-            <td class="min-w-[100px]">
+            <td>
               <span class="truncate block">{{ user.inviter_id || '-' }}</span>
             </td>
-            <td class="min-w-[100px]">
+            <td>
               <span class="text-gray-600 truncate block">{{ getSourceTypeName(user.source_type) }}</span>
             </td>
-            <td class="min-w-[120px]">
-              <span class="whitespace-nowrap">{{ user.created_at | date:'yyyy-MM-dd' }}</span>
+            <td>
+              <span class="whitespace-nowrap text-xs">{{ user.created_at | date:'yyyy-MM-dd HH:mm:ss' }}</span>
             </td>
-            <td class="min-w-[140px]">
-              <span class="whitespace-nowrap">{{ user.last_login_at | date:'yyyy-MM-dd HH:mm' }}</span>
+            <td>
+              <span class="whitespace-nowrap text-xs">{{ user.last_login_at | date:'yyyy-MM-dd HH:mm:ss' }}</span>
             </td>
-            <td class="min-w-[80px]">
+            <td>
               <nz-tag [nzColor]="user.status === 1 ? 'success' : 'error'">
                 {{ user.status === 1 ? '启用' : '禁用' }}
               </nz-tag>
