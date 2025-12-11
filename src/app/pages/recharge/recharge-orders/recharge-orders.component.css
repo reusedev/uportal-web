@@ -33,24 +33,6 @@
   text-align: right;
 }
 
-/* 操作列固定在右侧 */
-:host ::ng-deep .ant-table-thead > tr > th.sticky-action-column,
-:host ::ng-deep .ant-table-tbody > tr > td.sticky-action-column {
-  position: sticky;
-  right: 0;
-  z-index: 10;
-  background-color: white;
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
-}
-
-:host ::ng-deep .ant-table-thead > tr > th.sticky-action-column {
-  background-color: #f9fafb;
-}
-
-:host ::ng-deep .ant-table-tbody > tr:hover > td.sticky-action-column {
-  background-color: #f9fafb;
-}
-
 /* 响应式调整 */
 @media (max-width: 768px) {
   .search-form {

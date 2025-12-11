@@ -114,7 +114,7 @@
 <!-- 用户列表 -->
 <div>
   <nz-spin [nzSpinning]="loading">
-    <div *ngIf="viewMode === 'table'" class="overflow-x-auto bg-white rounded-lg border border-gray-200 shadow-sm">
+    <div *ngIf="viewMode === 'table'" class="bg-white rounded-lg border border-gray-200 shadow-sm">
       <nz-table
         #basicTable
         [nzData]="filteredUsers"
@@ -126,7 +126,8 @@
         (nzPageIndexChange)="onPageIndexChange($event)"
         (nzPageSizeChange)="onPageSizeChange($event)"
         (nzQueryParams)="onQueryParamsChange($event)"
-        class="w-full min-w-[900px]"
+        [nzScroll]="{ x: '900px' }"
+        class="w-full"
       >
         <thead>
           <tr>
@@ -138,7 +139,7 @@
             <th>注册时间</th>
             <th>最后登录</th>
             <th>状态</th>
-            <th class="sticky-action-column">操作</th>
+            <th nzWidth="100px" nzRight>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -174,7 +175,7 @@
                 {{ user.status === 1 ? '启用' : '禁用' }}
               </nz-tag>
             </td>
-            <td class="min-w-[100px] sticky-action-column">
+            <td nzRight>
               <div class="flex gap-2">
                 <button nz-button nzType="primary" nzSize="small" (click)="viewUserDetail(user)">
                   <nz-icon nzType="eye" nzTheme="outline"></nz-icon>

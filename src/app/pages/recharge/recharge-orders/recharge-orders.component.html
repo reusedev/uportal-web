@@ -75,11 +75,11 @@
 </div>
 
 <!-- 订单列表 -->
-<div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-x-auto">
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm">
   <nz-table #orderTable [nzData]="orderList" [nzLoading]="loading" [nzTotal]="totalCount" [nzPageSize]="pageSize"
     [nzPageIndex]="pageIndex" [nzFrontPagination]="false" [nzShowPagination]="true" [nzShowSizeChanger]="true" [nzShowQuickJumper]="true"
     [nzShowTotal]="totalTemplate" (nzPageIndexChange)="onPageChange($event)"
-    (nzPageSizeChange)="onPageSizeChange($event)" nzSize="middle" class="w-full min-w-[1000px]">
+    (nzPageSizeChange)="onPageSizeChange($event)" [nzScroll]="{ x: '1000px' }" nzSize="middle" class="w-full">
     <thead>
       <tr>
         <th>ID</th>
@@ -91,7 +91,7 @@
         <th>订单状态</th>
         <th>创建时间</th>
         <th>支付时间</th>
-        <th class="sticky-action-column">操作</th>
+        <th nzWidth="100px" nzRight>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -137,7 +137,7 @@
         <td class="min-w-[140px]">
           <span class="text-xs whitespace-nowrap">{{ order.paid_at | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
         </td>
-        <td class="min-w-[100px] sticky-action-column">
+        <td nzRight>
           <button nz-button nzType="primary" nzSize="small" (click)="viewOrderDetail(order.order_id)">
             <nz-icon nzType="eye" nzTheme="outline"></nz-icon>
             详情
