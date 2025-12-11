@@ -66,6 +66,11 @@ export class DateLabelComponent implements ControlValueAccessor, OnInit {
           ? this.customOption
           : [
             {
+              value: 'today',
+              label: '今天',
+              time: [ new Date(), new Date() ],
+            },
+            {
               value: 'yesterday',
               label: '昨天',
               time: [ addDays(new Date(), -1), addDays(new Date(), -1) ],
