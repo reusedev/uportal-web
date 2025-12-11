@@ -1,20 +1,19 @@
 <!-- user-management.component.html -->
-<div class="flex justify-between items-center py-4 border-b border-gray-100">
+<div class="flex justify-between items-center py-4 border-b border-gray-100 px-2 sm:px-0">
   <div class="flex gap-4">
     <div
-      class="w-10 h-10 flex justify-center items-center rounded-full border border-[#EBEBEB] bg-white shadow-[0_1px_2px_0_rgba(10,13,20,0.03)]">
+      class="w-10 h-10 flex justify-center items-center rounded-full border border-[#EBEBEB] bg-white shadow-[0_1px_2px_0_rgba(10,13,20,0.03)] flex-shrink-0">
       <nz-icon class="text-[16px]" nzType="team" nzTheme="outline" />
     </div>
-    <div class="flex flex-col gap-0">
-      <div class="text-lg font-semibold text-[#0A0D14]">用户管理</div>
-      <div class="text-xs text-[#6B7280]">管理系统用户和代币余额</div>
+    <div class="flex flex-col gap-0 min-w-0">
+      <div class="text-base sm:text-lg font-semibold text-[#0A0D14] truncate">用户管理</div>
+      <div class="text-xs text-[#6B7280] truncate">管理系统用户和代币余额</div>
     </div>
   </div>
-
 </div>
 
 <!-- 筛选器 -->
-<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 my-6">
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6 my-4 sm:my-6">
   <div class="flex items-center gap-2 mb-4">
     <nz-icon nzType="filter" nzTheme="outline" class="text-gray-500"></nz-icon>
     <span class="text-sm font-medium text-gray-700">筛选条件</span>
@@ -115,7 +114,7 @@
 <!-- 用户列表 -->
 <div>
   <nz-spin [nzSpinning]="loading">
-    <div *ngIf="viewMode === 'table'" class="overflow-hidden bg-white rounded-lg border border-gray-200 shadow-sm">
+    <div *ngIf="viewMode === 'table'" class="overflow-x-auto bg-white rounded-lg border border-gray-200 shadow-sm">
       <nz-table
         #basicTable
         [nzData]="filteredUsers"
@@ -127,7 +126,7 @@
         (nzPageIndexChange)="onPageIndexChange($event)"
         (nzPageSizeChange)="onPageSizeChange($event)"
         (nzQueryParams)="onQueryParamsChange($event)"
-        class="w-full"
+        class="w-full min-w-[900px]"
       >
         <thead>
           <tr>
@@ -139,37 +138,43 @@
             <th>注册时间</th>
             <th>最后登录</th>
             <th>状态</th>
-            <th>操作</th>
+            <th class="sticky-action-column">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of basicTable.data">
-            <td>{{ user.id }}</td>
-            <td class="w-[200px]">
+            <td class="min-w-[60px]">{{ user.id }}</td>
+            <td class="min-w-[180px]">
               <div class="flex items-center">
-                <nz-avatar [nzSize]="32" [nzSrc]="user.avatar || '/assets/avatar.png'" class="mr-3"></nz-avatar>
-                <div>
-                  <div class="font-medium" [class.text-gray-400]="!user.nickname">
+                <nz-avatar [nzSize]="32" [nzSrc]="user.avatar || '/assets/avatar.png'" class="mr-3 flex-shrink-0"></nz-avatar>
+                <div class="min-w-0 flex-1">
+                  <div class="font-medium truncate" [class.text-gray-400]="!user.nickname">
                     {{ user.nickname || '暂无昵称' }}
                   </div>
                 </div>
               </div>
             </td>
-            <td>
+            <td class="min-w-[100px]">
               <span class="text-blue-600 font-medium">{{ user.token_balance }}</span>
             </td>
-            <td>{{ user.inviter_id || '-' }}</td>
-            <td>
-              <span class="text-gray-600">{{ getSourceTypeName(user.source_type) }}</span>
+            <td class="min-w-[100px]">
+              <span class="truncate block">{{ user.inviter_id || '-' }}</span>
             </td>
-            <td>{{ user.created_at | date:'yyyy-MM-dd' }}</td>
-            <td>{{ user.last_login_at | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td>
+            <td class="min-w-[100px]">
+              <span class="text-gray-600 truncate block">{{ getSourceTypeName(user.source_type) }}</span>
+            </td>
+            <td class="min-w-[120px]">
+              <span class="whitespace-nowrap">{{ user.created_at | date:'yyyy-MM-dd' }}</span>
+            </td>
+            <td class="min-w-[140px]">
+              <span class="whitespace-nowrap">{{ user.last_login_at | date:'yyyy-MM-dd HH:mm' }}</span>
+            </td>
+            <td class="min-w-[80px]">
               <nz-tag [nzColor]="user.status === 1 ? 'success' : 'error'">
                 {{ user.status === 1 ? '启用' : '禁用' }}
               </nz-tag>
             </td>
-            <td>
+            <td class="min-w-[100px] sticky-action-column">
               <div class="flex gap-2">
                 <button nz-button nzType="primary" nzSize="small" (click)="viewUserDetail(user)">
                   <nz-icon nzType="eye" nzTheme="outline"></nz-icon>

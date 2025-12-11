@@ -87,10 +87,19 @@
 :host ::ng-deep .main-content-wrapper {
   margin-left: 272px;
   transition: margin-left 0.3s;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 :host ::ng-deep .main-content-wrapper.collapsed {
   margin-left: 100px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  :host ::ng-deep .main-content-wrapper {
+    margin-left: 100px;
+  }
 }
 
 :host ::ng-deep .collapsed-close .ant-menu-title-content{
