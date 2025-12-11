@@ -19,8 +19,8 @@
     <span class="text-sm font-medium text-gray-700">筛选条件</span>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <!-- 第一行 -->
+  <!-- 第一行：5个筛选条件 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
     <div class="flex flex-col gap-2">
       <label class="text-xs text-gray-500 font-medium">状态</label>
       <nz-select nzAllowClear [(ngModel)]="filters.status" nzPlaceHolder="全部状态" class="w-full rounded-[4px]">
@@ -61,7 +61,6 @@
       />
     </div>
 
-    <!-- 第二行 -->
     <div class="flex flex-col gap-2">
       <label class="text-xs text-gray-500 font-medium">用户昵称</label>
       <input
@@ -71,42 +70,39 @@
         class="w-full rounded-[4px]"
       />
     </div>
+  </div>
 
-    <div class="flex flex-col gap-2">
+  <!-- 第二行：日期选择器和按钮 -->
+  <div class="flex flex-row gap-4 mt-4 items-end flex-wrap">
+    <div class="flex flex-col gap-2 ">
       <label class="text-xs text-gray-500 font-medium">注册时间</label>
-      <nz-date-picker
-        nzAllowClear
-        [(ngModel)]="filters.created_at"
-        nzPlaceHolder="选择注册时间"
-        nzMode="date"
-        nzFormat="yyyy-MM-dd"
-        class="w-full rounded-[4px]"
-      ></nz-date-picker>
+      <app-date-label
+        [(ngModel)]="filters.created_at_range"
+        [labelRight]="false"
+        mode="date"
+        class="w-full"
+      ></app-date-label>
     </div>
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 ">
       <label class="text-xs text-gray-500 font-medium">最后登录时间</label>
-      <nz-date-picker
-        nzAllowClear
-        [(ngModel)]="filters.last_login_at"
-        nzPlaceHolder="选择最后登录时间"
-        nzMode="date"
-        nzFormat="yyyy-MM-dd"
-        class="w-full rounded-[4px]"
-      ></nz-date-picker>
+      <app-date-label
+        [(ngModel)]="filters.last_login_at_range"
+        [labelRight]="false"
+        mode="date"
+        class="w-full"
+      ></app-date-label>
     </div>
 
-    <div class="flex flex-col gap-2 justify-end">
-      <div class="flex gap-2">
-        <button nz-button nzType="primary" (click)="applyFilters()" class="flex-1">
-          <nz-icon nzType="search" nzTheme="outline"></nz-icon>
-          查询
-        </button>
-        <button nz-button nzType="default" (click)="resetFilters()" class="flex-1">
-          <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
-          重置
-        </button>
-      </div>
+    <div class="flex gap-2">
+      <button nz-button nzType="primary" (click)="applyFilters()" [nzLoading]="loading">
+        <nz-icon nzType="search" nzTheme="outline"></nz-icon>
+        查询
+      </button>
+      <button nz-button nzType="default" (click)="resetFilters()">
+        <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
+        重置
+      </button>
     </div>
   </div>
 </div>

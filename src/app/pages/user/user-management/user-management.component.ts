@@ -7,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormsModule } from '@angular/forms';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { DateLabelComponent } from '../../../components/date-label/date-label.component';
+import { addDays, format } from 'date-fns';
 
 // 字典项接口
 interface DictItem {
@@ -19,7 +21,7 @@ interface DictItem {
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
-  imports: [CommonModule, RouterModule, PublicModule, FormsModule],
+  imports: [CommonModule, RouterModule, PublicModule, FormsModule, DateLabelComponent],
 })
 export class UserManagementComponent implements OnInit {
   message = inject(NzMessageService);
@@ -47,14 +49,27 @@ export class UserManagementComponent implements OnInit {
     inviter_id: '',
     source_type: null as string | null,
     nickname: '',
-    created_at: null as Date | null,
-    last_login_at: null as Date | null,
+    created_at_range: null as string[] | null, // [startDate, endDate] 格式: ['yyyy-MM-dd', 'yyyy-MM-dd']
+    last_login_at_range: null as string[] | null, // [startDate, endDate] 格式: ['yyyy-MM-dd', 'yyyy-MM-dd']
   };
 
   // 来源类型选项
   sourceTypeOptions: DictItem[] = [];
 
   ngOnInit(): void {
+    // 设置默认值为近7天
+    const today = new Date();
+    const sevenDaysAgo = addDays(today, -7);
+    const yesterday = addDays(today, -1);
+    this.filters.created_at_range = [
+      format(sevenDaysAgo, 'yyyy-MM-dd'),
+      format(yesterday, 'yyyy-MM-dd'),
+    ];
+    this.filters.last_login_at_range = [
+      format(sevenDaysAgo, 'yyyy-MM-dd'),
+      format(yesterday, 'yyyy-MM-dd'),
+    ];
+
     this.loadSourceTypeDict();
     this.loadUserList();
   }
@@ -101,20 +116,22 @@ export class UserManagementComponent implements OnInit {
     params.status = this.filters.status !== null ? this.filters.status : null;
     params.nickname = this.filters.nickname && this.filters.nickname.trim() ? this.filters.nickname.trim() : null;
 
-    if (this.filters.created_at) {
-      // 格式化为 YYYY-MM-DD
-      const date = new Date(this.filters.created_at);
-      params.created_at = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    // 注册时间范围
+    if (this.filters.created_at_range && this.filters.created_at_range.length === 2) {
+      params.created_at_start = this.filters.created_at_range[0];
+      params.created_at_end = this.filters.created_at_range[1];
     } else {
-      params.created_at = null;
+      params.created_at_start = null;
+      params.created_at_end = null;
     }
 
-    if (this.filters.last_login_at) {
-      // 格式化为 YYYY-MM-DD
-      const date = new Date(this.filters.last_login_at);
-      params.last_login_at = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    // 最后登录时间范围
+    if (this.filters.last_login_at_range && this.filters.last_login_at_range.length === 2) {
+      params.last_login_at_start = this.filters.last_login_at_range[0];
+      params.last_login_at_end = this.filters.last_login_at_range[1];
     } else {
-      params.last_login_at = null;
+      params.last_login_at_start = null;
+      params.last_login_at_end = null;
     }
 
     this.http
@@ -175,8 +192,8 @@ export class UserManagementComponent implements OnInit {
       inviter_id: '',
       source_type: null,
       nickname: '',
-      created_at: null,
-      last_login_at: null,
+      created_at_range: null,
+      last_login_at_range: null,
     };
     this.pageIndex = 1;
     this.loadUserList();
