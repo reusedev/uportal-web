@@ -127,12 +127,20 @@ export class RechargeOrdersComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.loading = false;
-          this.orderList = res.data || [];
-          this.totalCount = res.count || 0;
+          if (res.code === 0) {
+            this.orderList = res.data || [];
+            this.totalCount = res.count || 0;
+          } else {
+            this.message.error('获取充值订单列表失败');
+            this.orderList = [];
+            this.totalCount = 0;
+          }
         },
         error: () => {
           this.message.error('获取充值订单列表失败');
           this.loading = false;
+          this.orderList = [];
+          this.totalCount = 0;
         },
       });
   }
@@ -167,6 +175,7 @@ export class RechargeOrdersComponent implements OnInit {
     };
     this.pageIndex = 1;
     this.loadOrderList();
+    this.getOrderStatusCount(); // 更新订单分类详情
   }
 
   // 查看订单详情

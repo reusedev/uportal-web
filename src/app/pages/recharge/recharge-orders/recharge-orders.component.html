@@ -77,7 +77,7 @@
 <!-- 订单列表 -->
 <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
   <nz-table #orderTable [nzData]="orderList" [nzLoading]="loading" [nzTotal]="totalCount" [nzPageSize]="pageSize"
-    [nzPageIndex]="pageIndex" [nzShowPagination]="true" [nzShowSizeChanger]="true" [nzShowQuickJumper]="true"
+    [nzPageIndex]="pageIndex" [nzFrontPagination]="false" [nzShowPagination]="true" [nzShowSizeChanger]="true" [nzShowQuickJumper]="true"
     [nzShowTotal]="totalTemplate" (nzPageIndexChange)="onPageChange($event)"
     (nzPageSizeChange)="onPageSizeChange($event)" nzSize="middle">
     <thead>
