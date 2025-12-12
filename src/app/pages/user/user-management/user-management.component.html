@@ -110,7 +110,7 @@
 <!-- 用户列表 -->
 <div>
   <nz-spin [nzSpinning]="loading">
-    <div *ngIf="viewMode === 'table'" class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-x-auto">
+    <div *ngIf="viewMode === 'table'" class="bg-white rounded-lg border border-gray-200 shadow-sm">
       <nz-table
         #basicTable
         [nzData]="filteredUsers"
@@ -123,7 +123,7 @@
         (nzPageSizeChange)="onPageSizeChange($event)"
         (nzQueryParams)="onQueryParamsChange($event)"
         [nzScroll]="{ x: '1200px' }"
-        class="w-full min-w-[1200px]"
+        class="w-full"
       >
         <thead>
           <tr>

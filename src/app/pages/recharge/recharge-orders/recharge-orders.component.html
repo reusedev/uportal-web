@@ -79,34 +79,34 @@
   <nz-table #orderTable [nzData]="orderList" [nzLoading]="loading" [nzTotal]="totalCount" [nzPageSize]="pageSize"
     [nzPageIndex]="pageIndex" [nzFrontPagination]="false" [nzShowPagination]="true" [nzShowSizeChanger]="true" [nzShowQuickJumper]="true"
     [nzShowTotal]="totalTemplate" (nzPageIndexChange)="onPageChange($event)"
-    (nzPageSizeChange)="onPageSizeChange($event)" [nzScroll]="{ x: '1000px' }" nzSize="middle" class="w-full">
+    (nzPageSizeChange)="onPageSizeChange($event)" [nzScroll]="{ x: '1200px' }" nzSize="middle" class="w-full">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>用户信息</th>
-        <th>充值方案</th>
-        <th>支付金额</th>
-        <th>支付方式</th>
-        <th>交易号</th>
-        <th>订单状态</th>
-        <th>创建时间</th>
-        <th>支付时间</th>
-        <th nzWidth="100px" nzRight>操作</th>
+        <th nzWidth="100px">ID</th>
+        <th nzWidth="150px">用户信息</th>
+        <th nzWidth="150px">充值方案</th>
+        <th nzWidth="120px">支付金额</th>
+        <th nzWidth="120px">支付方式</th>
+        <th nzWidth="150px">交易号</th>
+        <th nzWidth="120px">订单状态</th>
+        <th nzWidth="180px">创建时间</th>
+        <th nzWidth="180px">支付时间</th>
+        <th nzWidth="120px" nzRight>操作</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let order of orderTable.data">
-        <td class="min-w-[80px]">
+        <td>
           <span class="font-mono text-sm">{{ order.order_id }}</span>
         </td>
-        <td class="min-w-[120px]">
+        <td>
           <div class="flex flex-col">
             <span class="font-medium truncate">{{ order.nickname }}</span>
             <span class="text-xs text-gray-500">{{ order.user_id }}</span>
           </div>
         </td>
-        <td class="min-w-[120px]">
-          <div class="flex flex-col">
+        <td>
+          <div nz-tooltip [nzTooltipTitle]="order.token_amount + ' 代币，方案: ' + order.plan_name" class="flex flex-col">
             <div class="flex items-center">
               <nz-icon nzType="wallet" nzTheme="outline" class="mr-1 text-blue-500 flex-shrink-0"></nz-icon>
               <span class="font-semibold truncate">{{ order.token_amount }} 代币</span>
@@ -114,27 +114,27 @@
             <span class="text-xs text-gray-500 truncate">方案: {{ order.plan_name }}</span>
           </div>
         </td>
-        <td class="min-w-[100px]">
+        <td>
           <div class="flex items-center">
             <nz-icon nzType="dollar" nzTheme="outline" class="mr-1 text-green-500 flex-shrink-0"></nz-icon>
             <span class="font-semibold">{{ formatAmount(order.amount_paid) }}</span>
           </div>
         </td>
-        <td class="min-w-[100px]">
+        <td>
           <nz-tag [nzColor]="'blue'">{{ paymentMethodMap[order.payment_method] || order.payment_method }}</nz-tag>
         </td>
-        <td class="min-w-[120px]">
-          <span class="font-mono text-xs truncate block">{{ order.transaction_id }}</span>
+        <td>
+          <span nz-tooltip [nzTooltipTitle]="order.transaction_id" class="font-mono text-xs truncate block">{{ order.transaction_id }}</span>
         </td>
-        <td class="min-w-[100px]">
+        <td>
           <nz-tag [nzColor]="statusColorMap[order.status]">
             {{ statusTextMap[order.status] }}
           </nz-tag>
         </td>
-        <td class="min-w-[140px]">
+        <td>
           <span class="text-xs whitespace-nowrap">{{order.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
         </td>
-        <td class="min-w-[140px]">
+        <td>
           <span class="text-xs whitespace-nowrap">{{ order.paid_at | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
         </td>
         <td nzRight>
