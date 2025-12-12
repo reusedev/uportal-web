@@ -2,12 +2,12 @@
   <nz-select [(ngModel)]="value" (ngModelChange)="radioChange()" >
     <nz-option *ngFor="let item of option" [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
   </nz-select>
-  <nz-range-picker class="rounded-tl-none rounded-bl-none" style="width: 240px" nzAllowClear="false"
+  <nz-range-picker class="rounded-tl-none rounded-bl-none" style="width: 240px" nzAllowClear="true"
     [nzDisabledDate]="nzDisabledDate" [nzMode]="mode" [(ngModel)]="date" nzFormat="yyyy-MM-dd" (ngModelChange)="timeChange()"></nz-range-picker>
 </div>
 
 <div *ngIf="labelRight" class="flex">
-  <nz-range-picker class="rounded-tr-none rounded-br-none flex-1" nzAllowClear="false"
+  <nz-range-picker class="rounded-tr-none rounded-br-none flex-1" nzAllowClear="true"
     [nzDisabledDate]="nzDisabledDate" [nzMode]="mode" [(ngModel)]="date" nzFormat="yyyy-MM-dd" (ngModelChange)="timeChange()"></nz-range-picker>
   <nz-select [(ngModel)]="value" (ngModelChange)="radioChange()"  class="rounded-tl-none rounded-bl-none">
     <nz-option *ngFor="let item of option" [nzLabel]="item.label" [nzValue]="item.value"></nz-option>

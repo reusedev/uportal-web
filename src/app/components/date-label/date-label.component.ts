@@ -30,9 +30,9 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 export class DateLabelComponent implements ControlValueAccessor, OnInit {
   constructor(private cdr: ChangeDetectorRef) {}
 
-  onChange: (value: string[]) => void = () => undefined;
+  onChange: (value: string[] | null) => void = () => undefined;
 
-  onTouched: (value: string[]) => void = () => undefined;
+  onTouched: (value: string[] | null) => void = () => undefined;
 
   // 今天之前的都不能选
   @Input() nzDisabledDate: (current: Date) => boolean = (current: Date) =>{
@@ -199,6 +199,13 @@ export class DateLabelComponent implements ControlValueAccessor, OnInit {
   }
 
   timeChange() {
+    // 如果日期被清空，设置为自定义
+    if (!this.date || this.date.length !== 2) {
+      this.value = 'custom';
+      this.onChange(null);
+      return;
+    }
+
     const target = this.option.filter((item) => {
       return this.arraysAreEqual(
         item.time.map((item) => format(item, this.formatStr[this.mode])),
@@ -214,7 +221,11 @@ export class DateLabelComponent implements ControlValueAccessor, OnInit {
   }
 
   radioChange() {
-    this.date = this.option.find((item) => item.value === this.value)?.time;
+    if (this.value === 'custom' && !this.date) {
+      // 如果选择自定义且当前没有日期，不执行任何操作
+      return;
+    }
+    this.date = this.option.find((item) => item.value === this.value)?.time || null;
     this.inputValue();
     this.cdr.detectChanges();
   }
@@ -232,14 +243,18 @@ export class DateLabelComponent implements ControlValueAccessor, OnInit {
   }
 
   inputValue() {
+    if (!this.date || this.date.length !== 2) {
+      this.onChange(null);
+      return;
+    }
     const result = this.date.map((item: number | Date) =>
       format(item, this.formatStr[this.mode]),
     );
     this.onChange(result);
   }
 
-  writeValue(value: string[]): void {
-    if (value) {
+  writeValue(value: string[] | null): void {
+    if (value && value.length === 2) {
       this.date = [
         parse(value[0], this.formatStr[this.mode], new Date()),
         parse(value[1], this.formatStr[this.mode], new Date()),
@@ -252,16 +267,22 @@ export class DateLabelComponent implements ControlValueAccessor, OnInit {
       });
       if (target.length > 0) {
         this.value = target[0].value;
+      } else {
+        this.value = 'custom';
       }
-      this.cdr.detectChanges();
+    } else {
+      // 清空时设置为 null，label 显示自定义
+      this.date = null;
+      this.value = 'custom';
     }
+    this.cdr.detectChanges();
   }
 
-  registerOnChange(fn: (value: string[]) => void): void {
+  registerOnChange(fn: (value: string[] | null) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: (value: string[]) => void): void {
+  registerOnTouched(fn: (value: string[] | null) => void): void {
     this.onTouched = fn;
   }
 }
